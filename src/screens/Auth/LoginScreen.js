@@ -7,11 +7,11 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    if (email === 'user@example.com' && password === '123456') {
+    // if (email === 'bsanjay@gmail.com' && password === '123456') {
       navigation.navigate('Flights');
-    } else {
-      Alert.alert('Login Failed', 'Invalid email or password');
-    }
+    // } else {
+    //   Alert.alert('Login Failed', 'Invalid email or password');
+    // }
   };
 
   const handleGoogleLogin = () => {
@@ -19,7 +19,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleForgotPassword = () => {
-    Alert.alert('Forgot Password', 'Redirecting to reset password screen...');
+    navigation.navigate('ForgotPassword');
   };
 
   return (
