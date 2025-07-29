@@ -38,7 +38,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => Alert.alert('Redirect to register screen')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Don't have an account? Register</Text>
       </TouchableOpacity>
     </View>
