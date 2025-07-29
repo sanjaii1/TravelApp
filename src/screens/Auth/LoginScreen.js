@@ -8,7 +8,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = () => {
     // if (email === 'bsanjay@gmail.com' && password === '123456') {
-      navigation.navigate('Flights');
+      navigation.navigate('Home');
     // } else {
     //   Alert.alert('Login Failed', 'Invalid email or password');
     // }
