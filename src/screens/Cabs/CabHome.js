@@ -1,10 +1,18 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import CabOneWay from './CabOneWay';
+
+
+const Tab = createMaterialTopTabNavigator();
 
 export default function CabHome() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Cab Home Screen</Text>
-    </View>
+    <Tab.Navigator
+    screenOptions={{
+      tabBarStyle: { display: 'none' },
+    }}
+    >
+      <Tab.Screen name="One Way" component={CabOneWay} />
+    </Tab.Navigator>
   );
 }
