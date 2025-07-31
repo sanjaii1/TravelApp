@@ -18,14 +18,14 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={HomeTabs}   options={{ headerShown: false }}/>
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Flights" component={FlightHome} />
-        <Stack.Screen name="Cabs" component={CabHome} />
-        <Stack.Screen name="Hotels" component={HotelHome} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Flights" component={FlightHome} options={{ headerShown: false }} />
+        <Stack.Screen name="Cabs" component={CabHome} options={{ headerShown: false }} />
+        <Stack.Screen name="Hotels" component={HotelHome} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
