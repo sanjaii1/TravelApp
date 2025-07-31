@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform, Animated, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
-import { TextInput, Text, Button, IconButton, Surface, Chip } from 'react-native-paper';
+import { 
+  View, 
+  StyleSheet, 
+  Platform, 
+  Animated, 
+  TouchableOpacity, 
+  ScrollView, 
+  Dimensions,
+  Text,
+  TextInput
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -87,7 +95,7 @@ const RoundTripForm = () => {
       <View style={styles.travelerRow}>
         <View style={styles.travelerInfo}>
           <View style={styles.travelerIconContainer}>
-            <Icon name={icon} size={20} color="#4F46E5" />
+            <Ionicons name={icon} size={20} color="#007AFF" />
           </View>
           <View>
             <Text style={styles.travelerLabel}>{label}</Text>
@@ -102,14 +110,14 @@ const RoundTripForm = () => {
             onPress={onDecrement}
             disabled={count <= (label === 'Adults' ? 1 : 0)}
           >
-            <Icon name="minus" size={16} color={count <= (label === 'Adults' ? 1 : 0) ? "#9CA3AF" : "#4F46E5"} />
+            <Ionicons name="remove" size={16} color={count <= (label === 'Adults' ? 1 : 0) ? "#8E8E93" : "#007AFF"} />
           </TouchableOpacity>
           <Text style={styles.counterText}>{count}</Text>
           <TouchableOpacity
             style={styles.counterButton}
             onPress={onIncrement}
           >
-            <Icon name="plus" size={16} color="#4F46E5" />
+            <Ionicons name="add" size={16} color="#007AFF" />
           </TouchableOpacity>
         </View>
       </View>
@@ -120,7 +128,7 @@ const RoundTripForm = () => {
     <TouchableOpacity style={styles.dateCard} onPress={onPress}>
       <View style={styles.dateCardContent}>
         <View style={styles.dateIconContainer}>
-          <Icon name={icon} size={24} color="#4F46E5" />
+          <Ionicons name={icon} size={24} color="#007AFF" />
         </View>
         <View style={styles.dateTextContainer}>
           <Text style={styles.dateLabel}>{label} Date</Text>
@@ -132,7 +140,7 @@ const RoundTripForm = () => {
           })}</Text>
         </View>
         <View style={styles.dateArrowContainer}>
-          <Icon name="chevron-right" size={20} color="#9CA3AF" />
+          <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
         </View>
       </View>
     </TouchableOpacity>
@@ -146,53 +154,40 @@ const RoundTripForm = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="airplane" size={22} color="#4F46E5" />
+                <Ionicons name="airplane" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Flight Route</Text>
             </View>
             
             <View style={styles.routeContainer}>
               <View style={styles.inputContainer}>
-                <TextInput
-                  mode="outlined"
-                  label="From"
-                  placeholder="Departure city"
-                  style={styles.routeInput}
-                  theme={{
-                    colors: {
-                      primary: '#4F46E5',
-                      outline: '#E5E7EB',
-                      background: '#FFFFFF'
-                    }
-                  }}
-                  left={<TextInput.Icon icon="airplane-takeoff" color="#6B7280" />}
-                />
+                <Text style={styles.inputLabel}>From</Text>
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="airplane-outline" size={20} color="#8E8E93" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Departure city"
+                    placeholderTextColor="#8E8E93"
+                  />
+                </View>
               </View>
               
               <TouchableOpacity style={styles.swapButton}>
-                <LinearGradient
-                  colors={['#4F46E5', '#7C3AED']}
-                  style={styles.swapButtonGradient}
-                >
-                  <Icon name="swap-horizontal" size={20} color="#FFFFFF" />
-                </LinearGradient>
+                <View style={styles.swapButtonContainer}>
+                  <Ionicons name="swap-horizontal" size={20} color="#007AFF" />
+                </View>
               </TouchableOpacity>
               
               <View style={styles.inputContainer}>
-                <TextInput
-                  mode="outlined"
-                  label="To"
-                  placeholder="Destination city"
-                  style={styles.routeInput}
-                  theme={{
-                    colors: {
-                      primary: '#4F46E5',
-                      outline: '#E5E7EB',
-                      background: '#FFFFFF'
-                    }
-                  }}
-                  left={<TextInput.Icon icon="airplane-landing" color="#6B7280" />}
-                />
+                <Text style={styles.inputLabel}>To</Text>
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Destination city"
+                    placeholderTextColor="#8E8E93"
+                  />
+                </View>
               </View>
             </View>
           </View>
@@ -201,7 +196,7 @@ const RoundTripForm = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="calendar" size={22} color="#4F46E5" />
+                <Ionicons name="calendar" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Travel Dates</Text>
             </View>
@@ -211,13 +206,13 @@ const RoundTripForm = () => {
                 label="Departure"
                 date={departureDate}
                 onPress={showDeparturePickerModal}
-                icon="airplane-takeoff"
+                icon="airplane-outline"
               />
               
               <View style={styles.dateDivider}>
                 <View style={styles.dividerLine} />
                 <View style={styles.dividerIconContainer}>
-                  <Icon name="arrow-right" size={16} color="#4F46E5" />
+                  <Ionicons name="arrow-forward" size={16} color="#007AFF" />
                 </View>
                 <View style={styles.dividerLine} />
               </View>
@@ -226,7 +221,7 @@ const RoundTripForm = () => {
                 label="Return"
                 date={returnDate}
                 onPress={showReturnPickerModal}
-                icon="airplane-landing"
+                icon="airplane"
               />
             </View>
 
@@ -255,7 +250,7 @@ const RoundTripForm = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="seat" size={22} color="#4F46E5" />
+                <Ionicons name="business" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Cabin Class</Text>
             </View>
@@ -270,16 +265,12 @@ const RoundTripForm = () => {
                   ]}
                   onPress={() => setSelectedClass(cabinClass)}
                 >
-                  {selectedClass === cabinClass ? (
-                    <LinearGradient
-                      colors={['#4F46E5', '#7C3AED']}
-                      style={styles.selectedClassGradient}
-                    >
-                      <Text style={styles.selectedClassChipText}>{cabinClass}</Text>
-                    </LinearGradient>
-                  ) : (
-                    <Text style={styles.classChipText}>{cabinClass}</Text>
-                  )}
+                  <Text style={[
+                    styles.classChipText,
+                    selectedClass === cabinClass && styles.selectedClassChipText
+                  ]}>
+                    {cabinClass}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -289,7 +280,7 @@ const RoundTripForm = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="account-group" size={22} color="#4F46E5" />
+                <Ionicons name="people" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Travelers</Text>
             </View>
@@ -300,7 +291,7 @@ const RoundTripForm = () => {
                 count={adults}
                 onIncrement={() => incrementTraveler('adults')}
                 onDecrement={() => decrementTraveler('adults')}
-                icon="account"
+                icon="person"
               />
               
               <TravelerCounter
@@ -308,7 +299,7 @@ const RoundTripForm = () => {
                 count={children}
                 onIncrement={() => incrementTraveler('children')}
                 onDecrement={() => decrementTraveler('children')}
-                icon="account-child"
+                icon="person-outline"
               />
               
               <TravelerCounter
@@ -316,23 +307,15 @@ const RoundTripForm = () => {
                 count={infants}
                 onIncrement={() => incrementTraveler('infants')}
                 onDecrement={() => decrementTraveler('infants')}
-                icon="baby-face"
+                icon="person-circle-outline"
               />
             </View>
           </View>
 
           {/* Search Button */}
-          <TouchableOpacity
-            style={styles.searchButton}
-            onPress={() => console.log('Search flights')}
-          >
-            <LinearGradient
-              colors={['#4F46E5', '#7C3AED']}
-              style={styles.searchButtonGradient}
-            >
-              <Icon name="magnify" size={20} color="#FFFFFF" />
-              <Text style={styles.searchButtonText}>Search Round Trip Flights</Text>
-            </LinearGradient>
+          <TouchableOpacity style={styles.searchButton} onPress={() => console.log('Search round trip flights')}>
+            <Ionicons name="search" size={20} color="#FFFFFF" />
+            <Text style={styles.searchButtonText}>Search Round Trip Flights</Text>
           </TouchableOpacity>
         </ScrollView>
       </Animated.View>
@@ -345,26 +328,25 @@ export default RoundTripForm;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F2F2F7',
   },
   formContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F2F2F7',
   },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 20,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 16,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 4,
     overflow: 'hidden',
@@ -372,78 +354,89 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    paddingBottom: 16,
+    padding: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#F2F2F7',
   },
   sectionIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
   },
   routeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 0,
+    padding: 16,
+    paddingTop: 12,
   },
   inputContainer: {
     flex: 1,
   },
-  routeInput: {
-    backgroundColor: '#FFFFFF',
-    height: 56,
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1C1C1E',
+    marginBottom: 8,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  inputIcon: {
+    marginRight: 12,
+  },
+  input: {
+    flex: 1,
     fontSize: 16,
+    color: '#1C1C1E',
+    paddingVertical: 0,
   },
   swapButton: {
     marginHorizontal: 12,
   },
-  swapButtonGradient: {
+  swapButtonContainer: {
     width: 44,
     height: 44,
     borderRadius: 22,
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#4F46E5',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
   },
   datesContainer: {
-    padding: 20,
-    paddingTop: 0,
+    padding: 16,
+    paddingTop: 12,
     gap: 12,
   },
   dateCard: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E5EA',
   },
   dateCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: 16,
   },
   dateIconContainer: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -453,20 +446,20 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#8E8E93',
     marginBottom: 4,
     fontWeight: '500',
   },
   dateValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#1C1C1E',
   },
   dateArrowContainer: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -478,13 +471,13 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 2,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#E5E5EA',
   },
   dividerIconContainer: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 12,
@@ -492,58 +485,48 @@ const styles = StyleSheet.create({
   classContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 20,
-    paddingTop: 0,
-    gap: 12,
+    padding: 16,
+    paddingTop: 12,
+    gap: 8,
   },
   classChip: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 25,
-    backgroundColor: '#F1F5F9',
-    borderWidth: 2,
-    borderColor: '#E2E8F0',
+    borderRadius: 20,
+    backgroundColor: '#F2F2F7',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
     minWidth: (width - 84) / 2,
     alignItems: 'center',
   },
   selectedClassChip: {
-    borderColor: '#4F46E5',
-    backgroundColor: 'transparent',
-  },
-  selectedClassGradient: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 23,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: (width - 88) / 2,
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
   },
   classChipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#8E8E93',
   },
   selectedClassChipText: {
-    fontSize: 14,
-    fontWeight: '600',
     color: '#FFFFFF',
   },
   travelersContainer: {
-    padding: 20,
-    paddingTop: 0,
-    gap: 16,
+    padding: 16,
+    paddingTop: 12,
+    gap: 12,
   },
   travelerCard: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E5EA',
   },
   travelerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: 16,
   },
   travelerInfo: {
     flexDirection: 'row',
@@ -554,7 +537,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -562,12 +545,12 @@ const styles = StyleSheet.create({
   travelerLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#1C1C1E',
     marginBottom: 2,
   },
   travelerSubLabel: {
     fontSize: 12,
-    color: '#64748B',
+    color: '#8E8E93',
     fontWeight: '500',
   },
   counterRow: {
@@ -581,8 +564,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#E2E8F0',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -593,40 +576,39 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   disabledButton: {
-    backgroundColor: '#F8FAFC',
-    borderColor: '#E2E8F0',
+    backgroundColor: '#F2F2F7',
+    borderColor: '#E5E5EA',
   },
   counterText: {
     fontSize: 18,
     fontWeight: '700',
     marginHorizontal: 20,
-    color: '#1E293B',
+    color: '#1C1C1E',
     minWidth: 24,
     textAlign: 'center',
   },
   searchButton: {
-    marginTop: 32,
-    marginHorizontal: 4,
-  },
-  searchButtonGradient: {
+    backgroundColor: '#007AFF',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 18,
-    borderRadius: 16,
-    shadowColor: '#4F46E5',
+    marginTop: 16,
+    shadowColor: '#007AFF',
     shadowOffset: {
       width: 0,
-      height: 8,
+      height: 4,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 16,
+    shadowRadius: 8,
     elevation: 8,
   },
   searchButtonText: {
-    fontSize: 18,
-    fontWeight: '700',
     color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
     marginLeft: 8,
   },
 });

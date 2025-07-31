@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { Button, Text, Surface } from 'react-native-paper';
+import { 
+  View, 
+  StyleSheet, 
+  Dimensions, 
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Text
+} from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import OneWayForm from './OneWayForm';
 import RoundTripForm from './RoundTripForm';
 import MulticityScreen from './MulticityScreen.js';
+
+const { width, height } = Dimensions.get('window');
 
 const TABS = [
   { label: 'One Way', icon: 'airplane' },
@@ -30,124 +39,170 @@ const FlightHome = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#667eea', '#764ba2']}
-        style={styles.headerGradient}
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView 
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.headerTitle}>Book Your Flight</Text>
-        <Text style={styles.headerSubtitle}>Choose your travel type</Text>
-      </LinearGradient>
-      
-      <View style={styles.contentContainer}>
-        <View style={styles.tabBar}>
-          <View style={styles.tabRow}>
+        {/* Header Section */}
+        <LinearGradient
+          colors={['#007AFF', '#0056CC']}
+          style={styles.headerGradient}
+        >
+          <View style={styles.headerContent}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoCircle}>
+                <Icon name="airplane" size={32} color="#FFFFFF" />
+              </View>
+            </View>
+            <Text style={styles.headerTitle}>Book Your Flight</Text>
+            <Text style={styles.headerSubtitle}>Choose your travel type</Text>
+          </View>
+        </LinearGradient>
+        
+        {/* Content Container */}
+        <View style={styles.contentContainer}>
+          {/* Tab Bar */}
+          <View style={styles.tabBar}>
             {TABS.map((tab) => (
-              <Button
+              <TouchableOpacity
                 key={tab.label}
-                mode={activeTab === tab.label ? 'contained' : 'text'}
-                icon={() => (
-                  <Icon
-                    name={tab.icon}
-                    size={20}
-                    color={activeTab === tab.label ? '#FFFFFF' : '#4F46E5'}
-                  />
-                )}
                 style={[
                   styles.tabButton,
                   activeTab === tab.label && styles.activeTabButton,
                 ]}
-                labelStyle={[
+                onPress={() => setActiveTab(tab.label)}
+              >
+                <Icon
+                  name={tab.icon}
+                  size={20}
+                  color={activeTab === tab.label ? '#FFFFFF' : '#007AFF'}
+                  style={styles.tabIcon}
+                />
+                <Text style={[
                   styles.tabLabel,
                   activeTab === tab.label && styles.activeTabLabel
-                ]}
-                onPress={() => setActiveTab(tab.label)}
-                uppercase={false}
-              >
-                {tab.label}
-              </Button>
+                ]}>
+                  {tab.label}
+                </Text>
+              </TouchableOpacity>
             ))}
           </View>
+          
+          {/* Form Container */}
+          <View style={styles.formContainer}>
+            {renderForm()}
+          </View>
         </View>
-        
-        <View style={styles.formContainer}>
-          {renderForm()}
-        </View>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 export default FlightHome;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F2F2F7',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
   headerGradient: {
-    paddingTop: 60,
+    paddingTop: height * 0.05,
     paddingBottom: 30,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: 8,
+  headerContent: {
+    alignItems: 'center',
   },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#E2E8F0',
-    textAlign: 'center',
-    opacity: 0.9,
-  },
-  contentContainer: {
-    flex: 1,
-    marginTop: -20,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    backgroundColor: '#F8FAFC',
-  },
-  tabBar: {
-    marginHorizontal: 20,
-    marginTop: 20,
+  logoContainer: {
     marginBottom: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+  },
+  logoCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#E2E8F0',
+    textAlign: 'center',
+    opacity: 0.9,
+    lineHeight: 18,
+  },
+  contentContainer: {
+    flex: 1,
+    marginTop: -20,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: '#F2F2F7',
+    paddingTop: 20,
+  },
+  tabBar: {
+    marginHorizontal: 24,
+    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 4,
     overflow: 'hidden',
-  },
-  tabRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    minHeight: 60,
-    position: 'relative',
+    padding: 4,
   },
   tabButton: {
     flex: 1,
-    borderRadius: 0,
-    marginHorizontal: 0,
-    backgroundColor: 'transparent',
-    elevation: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    backgroundColor: 'transparent',
   },
   activeTabButton: {
-    backgroundColor: '#4F46E5',
+    backgroundColor: '#007AFF',
+    shadowColor: '#007AFF',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  tabIcon: {
+    marginRight: 6,
   },
   tabLabel: {
-    color: '#4F46E5',
+    color: '#007AFF',
     fontWeight: '600',
     fontSize: 14,
   },
@@ -157,7 +212,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    marginHorizontal: 20,
+    marginHorizontal: 24,
     backgroundColor: 'transparent',
   },
 });

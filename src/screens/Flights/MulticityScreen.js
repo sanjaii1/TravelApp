@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform, Animated, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
-import { Text, TextInput, Button, Surface, Chip, IconButton } from 'react-native-paper';
+import { 
+  View, 
+  StyleSheet, 
+  Platform, 
+  Animated, 
+  TouchableOpacity, 
+  ScrollView, 
+  Dimensions,
+  Text,
+  TextInput
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -105,7 +113,7 @@ const MultiCityScreen = () => {
       <View style={styles.travelerRow}>
         <View style={styles.travelerInfo}>
           <View style={styles.travelerIconContainer}>
-            <Icon name={icon} size={20} color="#4F46E5" />
+            <Ionicons name={icon} size={20} color="#007AFF" />
           </View>
           <View>
             <Text style={styles.travelerLabel}>{label}</Text>
@@ -120,14 +128,14 @@ const MultiCityScreen = () => {
             onPress={onDecrement}
             disabled={count <= (label === 'Adults' ? 1 : 0)}
           >
-            <Icon name="minus" size={16} color={count <= (label === 'Adults' ? 1 : 0) ? "#9CA3AF" : "#4F46E5"} />
+            <Ionicons name="remove" size={16} color={count <= (label === 'Adults' ? 1 : 0) ? "#8E8E93" : "#007AFF"} />
           </TouchableOpacity>
           <Text style={styles.counterText}>{count}</Text>
           <TouchableOpacity
             style={styles.counterButton}
             onPress={onIncrement}
           >
-            <Icon name="plus" size={16} color="#4F46E5" />
+            <Ionicons name="add" size={16} color="#007AFF" />
           </TouchableOpacity>
         </View>
       </View>
@@ -139,14 +147,14 @@ const MultiCityScreen = () => {
       <View style={styles.segmentHeader}>
         <View style={styles.segmentTitle}>
           <View style={styles.segmentIconContainer}>
-            <Icon name="airplane" size={20} color="#4F46E5" />
+            <Ionicons name="airplane" size={20} color="#007AFF" />
           </View>
           <Text style={styles.segmentTitleText}>Flight {index + 1}</Text>
         </View>
         {segments.length > 1 && (
           <TouchableOpacity onPress={() => onRemove(segment.id)} style={styles.removeButton}>
             <View style={styles.removeButtonContainer}>
-              <Icon name="close" size={16} color="#EF4444" />
+              <Ionicons name="close" size={16} color="#FF3B30" />
             </View>
           </TouchableOpacity>
         )}
@@ -155,41 +163,31 @@ const MultiCityScreen = () => {
       <View style={styles.segmentContent}>
         <View style={styles.routeContainer}>
           <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="From"
-              placeholder="Departure city"
-              value={segment.from}
-              onChangeText={(text) => updateSegment(segment.id, 'from', text)}
-              style={styles.routeInput}
-              theme={{
-                colors: {
-                  primary: '#4F46E5',
-                  outline: '#E5E7EB',
-                  background: '#FFFFFF'
-                }
-              }}
-              left={<TextInput.Icon icon="airplane-takeoff" color="#6B7280" />}
-            />
+            <Text style={styles.inputLabel}>From</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="airplane-outline" size={20} color="#8E8E93" style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Departure city"
+                placeholderTextColor="#8E8E93"
+                value={segment.from}
+                onChangeText={(text) => updateSegment(segment.id, 'from', text)}
+              />
+            </View>
           </View>
           
           <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="To"
-              placeholder="Destination city"
-              value={segment.to}
-              onChangeText={(text) => updateSegment(segment.id, 'to', text)}
-              style={styles.routeInput}
-              theme={{
-                colors: {
-                  primary: '#4F46E5',
-                  outline: '#E5E7EB',
-                  background: '#FFFFFF'
-                }
-              }}
-              left={<TextInput.Icon icon="airplane-landing" color="#6B7280" />}
-            />
+            <Text style={styles.inputLabel}>To</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Destination city"
+                placeholderTextColor="#8E8E93"
+                value={segment.to}
+                onChangeText={(text) => updateSegment(segment.id, 'to', text)}
+              />
+            </View>
           </View>
         </View>
         
@@ -199,7 +197,7 @@ const MultiCityScreen = () => {
         >
           <View style={styles.dateCardContent}>
             <View style={styles.dateIconContainer}>
-              <Icon name="calendar-range" size={24} color="#4F46E5" />
+              <Ionicons name="calendar-outline" size={24} color="#007AFF" />
             </View>
             <View style={styles.dateTextContainer}>
               <Text style={styles.dateLabel}>Departure Date</Text>
@@ -211,7 +209,7 @@ const MultiCityScreen = () => {
               })}</Text>
             </View>
             <View style={styles.dateArrowContainer}>
-              <Icon name="chevron-right" size={20} color="#9CA3AF" />
+              <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
             </View>
           </View>
         </TouchableOpacity>
@@ -237,7 +235,7 @@ const MultiCityScreen = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="map-marker-path" size={22} color="#4F46E5" />
+                <Ionicons name="map" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Flight Segments</Text>
             </View>
@@ -253,13 +251,10 @@ const MultiCityScreen = () => {
               ))}
               
               <TouchableOpacity style={styles.addSegmentButton} onPress={addSegment}>
-                <LinearGradient
-                  colors={['#F8FAFC', '#EEF2FF']}
-                  style={styles.addSegmentGradient}
-                >
-                  <Icon name="plus" size={24} color="#4F46E5" />
+                <View style={styles.addSegmentContainer}>
+                  <Ionicons name="add-circle-outline" size={24} color="#007AFF" />
                   <Text style={styles.addSegmentText}>Add Another Flight</Text>
-                </LinearGradient>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -268,7 +263,7 @@ const MultiCityScreen = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="seat" size={22} color="#4F46E5" />
+                <Ionicons name="business" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Cabin Class</Text>
             </View>
@@ -283,16 +278,12 @@ const MultiCityScreen = () => {
                   ]}
                   onPress={() => setSelectedClass(cabinClass)}
                 >
-                  {selectedClass === cabinClass ? (
-                    <LinearGradient
-                      colors={['#4F46E5', '#7C3AED']}
-                      style={styles.selectedClassGradient}
-                    >
-                      <Text style={styles.selectedClassChipText}>{cabinClass}</Text>
-                    </LinearGradient>
-                  ) : (
-                    <Text style={styles.classChipText}>{cabinClass}</Text>
-                  )}
+                  <Text style={[
+                    styles.classChipText,
+                    selectedClass === cabinClass && styles.selectedClassChipText
+                  ]}>
+                    {cabinClass}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -302,7 +293,7 @@ const MultiCityScreen = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Icon name="account-group" size={22} color="#4F46E5" />
+                <Ionicons name="people" size={22} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Travelers</Text>
             </View>
@@ -313,7 +304,7 @@ const MultiCityScreen = () => {
                 count={adults}
                 onIncrement={() => incrementTraveler('adults')}
                 onDecrement={() => decrementTraveler('adults')}
-                icon="account"
+                icon="person"
               />
               
               <TravelerCounter
@@ -321,7 +312,7 @@ const MultiCityScreen = () => {
                 count={children}
                 onIncrement={() => incrementTraveler('children')}
                 onDecrement={() => decrementTraveler('children')}
-                icon="account-child"
+                icon="person-outline"
               />
               
               <TravelerCounter
@@ -329,23 +320,15 @@ const MultiCityScreen = () => {
                 count={infants}
                 onIncrement={() => incrementTraveler('infants')}
                 onDecrement={() => decrementTraveler('infants')}
-                icon="baby-face"
+                icon="person-circle-outline"
               />
             </View>
           </View>
 
           {/* Search Button */}
-          <TouchableOpacity
-            style={styles.searchButton}
-            onPress={() => console.log('Search multi-city flights')}
-          >
-            <LinearGradient
-              colors={['#4F46E5', '#7C3AED']}
-              style={styles.searchButtonGradient}
-            >
-              <Icon name="magnify" size={20} color="#FFFFFF" />
-              <Text style={styles.searchButtonText}>Search Multi-City Flights</Text>
-            </LinearGradient>
+          <TouchableOpacity style={styles.searchButton} onPress={() => console.log('Search multi-city flights')}>
+            <Ionicons name="search" size={20} color="#FFFFFF" />
+            <Text style={styles.searchButtonText}>Search Multi-City Flights</Text>
           </TouchableOpacity>
         </ScrollView>
       </Animated.View>
@@ -358,26 +341,25 @@ export default MultiCityScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F2F2F7',
   },
   formContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F2F2F7',
   },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 20,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 16,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 4,
     overflow: 'hidden',
@@ -385,35 +367,35 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    paddingBottom: 16,
+    padding: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#F2F2F7',
   },
   sectionIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
   },
   segmentsContainer: {
-    padding: 20,
-    paddingTop: 0,
-    gap: 16,
+    padding: 16,
+    paddingTop: 12,
+    gap: 12,
   },
   segmentCard: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E5EA',
     overflow: 'hidden',
   },
   segmentHeader: {
@@ -423,7 +405,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#F2F2F7',
   },
   segmentTitle: {
     flexDirection: 'row',
@@ -433,7 +415,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
@@ -441,7 +423,7 @@ const styles = StyleSheet.create({
   segmentTitleText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#1C1C1E',
   },
   removeButton: {
     padding: 4,
@@ -450,7 +432,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: '#FFE5E5',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -466,16 +448,34 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
   },
-  routeInput: {
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1C1C1E',
+    marginBottom: 8,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    height: 56,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  inputIcon: {
+    marginRight: 12,
+  },
+  input: {
+    flex: 1,
     fontSize: 16,
+    color: '#1C1C1E',
+    paddingVertical: 0,
   },
   dateCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E5EA',
   },
   dateCardContent: {
     flexDirection: 'row',
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -496,97 +496,88 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#8E8E93',
     marginBottom: 4,
     fontWeight: '500',
   },
   dateValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#1C1C1E',
   },
   dateArrowContainer: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
   },
   addSegmentButton: {
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E5EA',
     borderStyle: 'dashed',
     overflow: 'hidden',
   },
-  addSegmentGradient: {
+  addSegmentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#F8F9FA',
   },
   addSegmentText: {
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '600',
-    color: '#4F46E5',
+    color: '#007AFF',
   },
   classContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 20,
-    paddingTop: 0,
-    gap: 12,
+    padding: 16,
+    paddingTop: 12,
+    gap: 8,
   },
   classChip: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 25,
-    backgroundColor: '#F1F5F9',
-    borderWidth: 2,
-    borderColor: '#E2E8F0',
+    borderRadius: 20,
+    backgroundColor: '#F2F2F7',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
     minWidth: (width - 84) / 2,
     alignItems: 'center',
   },
   selectedClassChip: {
-    borderColor: '#4F46E5',
-    backgroundColor: 'transparent',
-  },
-  selectedClassGradient: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 23,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: (width - 88) / 2,
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
   },
   classChipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#8E8E93',
   },
   selectedClassChipText: {
-    fontSize: 14,
-    fontWeight: '600',
     color: '#FFFFFF',
   },
   travelersContainer: {
-    padding: 20,
-    paddingTop: 0,
-    gap: 16,
+    padding: 16,
+    paddingTop: 12,
+    gap: 12,
   },
   travelerCard: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E5EA',
   },
   travelerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: 16,
   },
   travelerInfo: {
     flexDirection: 'row',
@@ -597,7 +588,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -605,12 +596,12 @@ const styles = StyleSheet.create({
   travelerLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#1C1C1E',
     marginBottom: 2,
   },
   travelerSubLabel: {
     fontSize: 12,
-    color: '#64748B',
+    color: '#8E8E93',
     fontWeight: '500',
   },
   counterRow: {
@@ -624,8 +615,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#E2E8F0',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -636,40 +627,39 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   disabledButton: {
-    backgroundColor: '#F8FAFC',
-    borderColor: '#E2E8F0',
+    backgroundColor: '#F2F2F7',
+    borderColor: '#E5E5EA',
   },
   counterText: {
     fontSize: 18,
     fontWeight: '700',
     marginHorizontal: 20,
-    color: '#1E293B',
+    color: '#1C1C1E',
     minWidth: 24,
     textAlign: 'center',
   },
   searchButton: {
-    marginTop: 32,
-    marginHorizontal: 4,
-  },
-  searchButtonGradient: {
+    backgroundColor: '#007AFF',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 18,
-    borderRadius: 16,
-    shadowColor: '#4F46E5',
+    marginTop: 16,
+    shadowColor: '#007AFF',
     shadowOffset: {
       width: 0,
-      height: 8,
+      height: 4,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 16,
+    shadowRadius: 8,
     elevation: 8,
   },
   searchButtonText: {
-    fontSize: 18,
-    fontWeight: '700',
     color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
     marginLeft: 8,
   },
 });
