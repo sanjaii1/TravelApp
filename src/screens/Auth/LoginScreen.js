@@ -152,6 +152,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100%',
   },
   headerSection: {
     alignItems: 'center',
@@ -191,7 +194,8 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   formSection: {
-    flex: 1,
+    width: '100%',
+    maxWidth: 400,
     paddingTop: 20,
   },
   inputContainer: {
