@@ -1,8 +1,8 @@
-// ... existing code ...
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Button, Text, Surface } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import OneWayForm from './OneWayForm';
 import RoundTripForm from './RoundTripForm';
 import MulticityScreen from './MulticityScreen.js';
@@ -30,39 +30,49 @@ const FlightHome = () => {
   };
 
   return (
-    <View style={styles.gradientBg}>
-      <Text style={styles.header}>Book Your Flight</Text>
-      <Surface style={styles.tabBar} elevation={4}>
-        <View style={styles.tabRow}>
-          {TABS.map((tab) => (
-            <Button
-              key={tab.label}
-              mode={activeTab === tab.label ? 'contained' : 'text'}
-              icon={() => (
-                <Icon
-                  name={tab.icon}
-                  size={22}
-                  color={activeTab === tab.label ? '#fff' : '#6200ee'}
-                />
-              )}
-              style={[
-                styles.tabButton,
-                activeTab === tab.label && styles.activeTabButton,
-              ]}
-              labelStyle={{
-                color: activeTab === tab.label ? '#fff' : '#6200ee',
-                fontWeight: 'bold',
-              }}
-              onPress={() => setActiveTab(tab.label)}
-              uppercase={false}
-            >
-              {tab.label}
-            </Button>
-          ))}
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.headerGradient}
+      >
+        <Text style={styles.headerTitle}>Book Your Flight</Text>
+        <Text style={styles.headerSubtitle}>Choose your travel type</Text>
+      </LinearGradient>
+      
+      <View style={styles.contentContainer}>
+        <View style={styles.tabBar}>
+          <View style={styles.tabRow}>
+            {TABS.map((tab) => (
+              <Button
+                key={tab.label}
+                mode={activeTab === tab.label ? 'contained' : 'text'}
+                icon={() => (
+                  <Icon
+                    name={tab.icon}
+                    size={20}
+                    color={activeTab === tab.label ? '#FFFFFF' : '#4F46E5'}
+                  />
+                )}
+                style={[
+                  styles.tabButton,
+                  activeTab === tab.label && styles.activeTabButton,
+                ]}
+                labelStyle={[
+                  styles.tabLabel,
+                  activeTab === tab.label && styles.activeTabLabel
+                ]}
+                onPress={() => setActiveTab(tab.label)}
+                uppercase={false}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </View>
         </View>
-      </Surface>
-      <View style={styles.formContainer}>
-        {renderForm()}
+        
+        <View style={styles.formContainer}>
+          {renderForm()}
+        </View>
       </View>
     </View>
   );
@@ -71,32 +81,58 @@ const FlightHome = () => {
 export default FlightHome;
 
 const styles = StyleSheet.create({
-  gradientBg: {
+  container: {
     flex: 1,
-    padding: 0,
-    backgroundColor: '#f5f7fa',
+    backgroundColor: '#F8FAFC',
   },
-  header: {
+  headerGradient: {
+    paddingTop: 60,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: 40,
-    marginBottom: 16,
-    alignSelf: 'center',
-    color: '#22223b',
-    letterSpacing: 1,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  headerSubtitle: {
+    fontSize: 16,
+    color: '#E2E8F0',
+    textAlign: 'center',
+    opacity: 0.9,
+  },
+  contentContainer: {
+    flex: 1,
+    marginTop: -20,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: '#F8FAFC',
   },
   tabBar: {
-    marginHorizontal: 12,
-    borderRadius: 16,
-    marginBottom: 12,
-    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
     overflow: 'hidden',
   },
   tabRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    minHeight: 56,
+    minHeight: 60,
     position: 'relative',
   },
   tabButton: {
@@ -105,20 +141,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     backgroundColor: 'transparent',
     elevation: 0,
+    paddingVertical: 12,
   },
   activeTabButton: {
-    backgroundColor: '#6200ee',
+    backgroundColor: '#4F46E5',
+  },
+  tabLabel: {
+    color: '#4F46E5',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  activeTabLabel: {
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
   formContainer: {
     flex: 1,
-    marginHorizontal: 12,
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    marginHorizontal: 20,
+    backgroundColor: 'transparent',
   },
 });

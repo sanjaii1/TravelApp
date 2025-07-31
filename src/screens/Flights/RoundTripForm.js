@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform, Animated, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Platform, Animated, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { TextInput, Text, Button, IconButton, Surface, Chip } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+
+const { width } = Dimensions.get('window');
 
 const RoundTripForm = () => {
   const [departureDate, setDepartureDate] = useState(new Date());
@@ -80,11 +83,18 @@ const RoundTripForm = () => {
   };
 
   const TravelerCounter = ({ label, count, onIncrement, onDecrement, icon }) => (
-    <Surface style={styles.travelerCard} elevation={1}>
+    <View style={styles.travelerCard}>
       <View style={styles.travelerRow}>
         <View style={styles.travelerInfo}>
-          <Icon name={icon} size={18} color="#6200ee" />
-          <Text style={styles.travelerLabel}>{label}</Text>
+          <View style={styles.travelerIconContainer}>
+            <Icon name={icon} size={20} color="#4F46E5" />
+          </View>
+          <View>
+            <Text style={styles.travelerLabel}>{label}</Text>
+            <Text style={styles.travelerSubLabel}>
+              {label === 'Adults' ? '12+ years' : label === 'Children' ? '2-11 years' : '0-2 years'}
+            </Text>
+          </View>
         </View>
         <View style={styles.counterRow}>
           <TouchableOpacity
@@ -92,197 +102,241 @@ const RoundTripForm = () => {
             onPress={onDecrement}
             disabled={count <= (label === 'Adults' ? 1 : 0)}
           >
-            <Icon name="minus" size={14} color={count <= (label === 'Adults' ? 1 : 0) ? "#ccc" : "#6200ee"} />
+            <Icon name="minus" size={16} color={count <= (label === 'Adults' ? 1 : 0) ? "#9CA3AF" : "#4F46E5"} />
           </TouchableOpacity>
           <Text style={styles.counterText}>{count}</Text>
           <TouchableOpacity
             style={styles.counterButton}
             onPress={onIncrement}
           >
-            <Icon name="plus" size={14} color="#6200ee" />
+            <Icon name="plus" size={16} color="#4F46E5" />
           </TouchableOpacity>
         </View>
       </View>
-    </Surface>
+    </View>
   );
 
   const DateCard = ({ label, date, onPress, icon }) => (
     <TouchableOpacity style={styles.dateCard} onPress={onPress}>
-      <View style={styles.dateContent}>
-        <Icon name={icon} size={18} color="#6200ee" />
+      <View style={styles.dateCardContent}>
+        <View style={styles.dateIconContainer}>
+          <Icon name={icon} size={24} color="#4F46E5" />
+        </View>
         <View style={styles.dateTextContainer}>
-          <Text style={styles.dateLabel}>{label}</Text>
-          <Text style={styles.dateValue}>{date.toLocaleDateString('en-US', { 
-            weekday: 'short', 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
+          <Text style={styles.dateLabel}>{label} Date</Text>
+          <Text style={styles.dateValue}>{date.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
           })}</Text>
         </View>
+        <View style={styles.dateArrowContainer}>
+          <Icon name="chevron-right" size={20} color="#9CA3AF" />
+        </View>
       </View>
-      <Icon name="chevron-right" size={18} color="#666" />
     </TouchableOpacity>
   );
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* From & To Section */}
-        <Surface style={styles.section} elevation={1}>
-          <View style={styles.sectionHeader}>
-            <Icon name="airplane" size={20} color="#6200ee" />
-            <Text style={styles.sectionTitle}>Route</Text>
+    <View style={styles.container}>
+      <Animated.View style={[styles.formContainer, { opacity: fadeAnim }]}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+          {/* From & To Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionIconContainer}>
+                <Icon name="airplane" size={22} color="#4F46E5" />
+              </View>
+              <Text style={styles.sectionTitle}>Flight Route</Text>
+            </View>
+            
+            <View style={styles.routeContainer}>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  mode="outlined"
+                  label="From"
+                  placeholder="Departure city"
+                  style={styles.routeInput}
+                  theme={{
+                    colors: {
+                      primary: '#4F46E5',
+                      outline: '#E5E7EB',
+                      background: '#FFFFFF'
+                    }
+                  }}
+                  left={<TextInput.Icon icon="airplane-takeoff" color="#6B7280" />}
+                />
+              </View>
+              
+              <TouchableOpacity style={styles.swapButton}>
+                <LinearGradient
+                  colors={['#4F46E5', '#7C3AED']}
+                  style={styles.swapButtonGradient}
+                >
+                  <Icon name="swap-horizontal" size={20} color="#FFFFFF" />
+                </LinearGradient>
+              </TouchableOpacity>
+              
+              <View style={styles.inputContainer}>
+                <TextInput
+                  mode="outlined"
+                  label="To"
+                  placeholder="Destination city"
+                  style={styles.routeInput}
+                  theme={{
+                    colors: {
+                      primary: '#4F46E5',
+                      outline: '#E5E7EB',
+                      background: '#FFFFFF'
+                    }
+                  }}
+                  left={<TextInput.Icon icon="airplane-landing" color="#6B7280" />}
+                />
+              </View>
+            </View>
           </View>
-          
-          <View style={styles.routeContainer}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                mode="outlined"
-                label="From"
-                style={styles.routeInput}
-                theme={{ colors: { primary: '#6200ee' } }}
-                left={<TextInput.Icon icon="airplane-takeoff" />}
+
+          {/* Dates Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionIconContainer}>
+                <Icon name="calendar" size={22} color="#4F46E5" />
+              </View>
+              <Text style={styles.sectionTitle}>Travel Dates</Text>
+            </View>
+            
+            <View style={styles.datesContainer}>
+              <DateCard
+                label="Departure"
+                date={departureDate}
+                onPress={showDeparturePickerModal}
+                icon="airplane-takeoff"
+              />
+              
+              <View style={styles.dateDivider}>
+                <View style={styles.dividerLine} />
+                <View style={styles.dividerIconContainer}>
+                  <Icon name="arrow-right" size={16} color="#4F46E5" />
+                </View>
+                <View style={styles.dividerLine} />
+              </View>
+              
+              <DateCard
+                label="Return"
+                date={returnDate}
+                onPress={showReturnPickerModal}
+                icon="airplane-landing"
               />
             </View>
+
+            {showDeparturePicker && (
+              <DateTimePicker
+                value={departureDate}
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={onDepartureDateChange}
+                minimumDate={new Date()}
+              />
+            )}
+
+            {showReturnPicker && (
+              <DateTimePicker
+                value={returnDate}
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={onReturnDateChange}
+                minimumDate={departureDate}
+              />
+            )}
+          </View>
+
+          {/* Class Selection */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionIconContainer}>
+                <Icon name="seat" size={22} color="#4F46E5" />
+              </View>
+              <Text style={styles.sectionTitle}>Cabin Class</Text>
+            </View>
             
-            <TouchableOpacity style={styles.swapButton}>
-              <Icon name="swap-horizontal" size={20} color="#6200ee" />
-            </TouchableOpacity>
+            <View style={styles.classContainer}>
+              {classes.map((cabinClass) => (
+                <TouchableOpacity
+                  key={cabinClass}
+                  style={[
+                    styles.classChip,
+                    selectedClass === cabinClass && styles.selectedClassChip
+                  ]}
+                  onPress={() => setSelectedClass(cabinClass)}
+                >
+                  {selectedClass === cabinClass ? (
+                    <LinearGradient
+                      colors={['#4F46E5', '#7C3AED']}
+                      style={styles.selectedClassGradient}
+                    >
+                      <Text style={styles.selectedClassChipText}>{cabinClass}</Text>
+                    </LinearGradient>
+                  ) : (
+                    <Text style={styles.classChipText}>{cabinClass}</Text>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Travelers Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionIconContainer}>
+                <Icon name="account-group" size={22} color="#4F46E5" />
+              </View>
+              <Text style={styles.sectionTitle}>Travelers</Text>
+            </View>
             
-            <View style={styles.inputContainer}>
-              <TextInput
-                mode="outlined"
-                label="To"
-                style={styles.routeInput}
-                theme={{ colors: { primary: '#6200ee' } }}
-                left={<TextInput.Icon icon="airplane-landing" />}
+            <View style={styles.travelersContainer}>
+              <TravelerCounter
+                label="Adults"
+                count={adults}
+                onIncrement={() => incrementTraveler('adults')}
+                onDecrement={() => decrementTraveler('adults')}
+                icon="account"
+              />
+              
+              <TravelerCounter
+                label="Children"
+                count={children}
+                onIncrement={() => incrementTraveler('children')}
+                onDecrement={() => decrementTraveler('children')}
+                icon="account-child"
+              />
+              
+              <TravelerCounter
+                label="Infants"
+                count={infants}
+                onIncrement={() => incrementTraveler('infants')}
+                onDecrement={() => decrementTraveler('infants')}
+                icon="baby-face"
               />
             </View>
           </View>
-        </Surface>
 
-        {/* Dates Section */}
-        <Surface style={styles.section} elevation={1}>
-          <View style={styles.sectionHeader}>
-            <Icon name="calendar" size={20} color="#6200ee" />
-            <Text style={styles.sectionTitle}>Travel Dates</Text>
-          </View>
-          
-          <View style={styles.datesContainer}>
-            <DateCard
-              label="Departure"
-              date={departureDate}
-              onPress={showDeparturePickerModal}
-              icon="airplane-takeoff"
-            />
-            
-            <View style={styles.dateDivider}>
-              <View style={styles.dividerLine} />
-              <Icon name="arrow-right" size={14} color="#ccc" />
-              <View style={styles.dividerLine} />
-            </View>
-            
-            <DateCard
-              label="Return"
-              date={returnDate}
-              onPress={showReturnPickerModal}
-              icon="airplane-landing"
-            />
-          </View>
-
-          {showDeparturePicker && (
-            <DateTimePicker
-              value={departureDate}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={onDepartureDateChange}
-              minimumDate={new Date()}
-            />
-          )}
-
-          {showReturnPicker && (
-            <DateTimePicker
-              value={returnDate}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={onReturnDateChange}
-              minimumDate={departureDate}
-            />
-          )}
-        </Surface>
-
-        {/* Class Selection */}
-        <Surface style={styles.section} elevation={1}>
-          <View style={styles.sectionHeader}>
-            <Icon name="seat" size={20} color="#6200ee" />
-            <Text style={styles.sectionTitle}>Cabin Class</Text>
-          </View>
-          
-          <View style={styles.classContainer}>
-            {classes.map((cabinClass) => (
-              <Chip
-                key={cabinClass}
-                selected={selectedClass === cabinClass}
-                onPress={() => setSelectedClass(cabinClass)}
-                style={[
-                  styles.classChip,
-                  selectedClass === cabinClass && styles.selectedClassChip
-                ]}
-                textStyle={[
-                  styles.classChipText,
-                  selectedClass === cabinClass && styles.selectedClassChipText
-                ]}
-              >
-                {cabinClass}
-              </Chip>
-            ))}
-          </View>
-        </Surface>
-
-        {/* Travelers Section */}
-        <Surface style={styles.section} elevation={1}>
-          <View style={styles.sectionHeader}>
-            <Icon name="account-group" size={20} color="#6200ee" />
-            <Text style={styles.sectionTitle}>Travelers</Text>
-          </View>
-          
-          <TravelerCounter
-            label="Adults"
-            count={adults}
-            onIncrement={() => incrementTraveler('adults')}
-            onDecrement={() => decrementTraveler('adults')}
-            icon="account"
-          />
-          
-          <TravelerCounter
-            label="Children"
-            count={children}
-            onIncrement={() => incrementTraveler('children')}
-            onDecrement={() => decrementTraveler('children')}
-            icon="account-child"
-          />
-          
-          <TravelerCounter
-            label="Infants"
-            count={infants}
-            onIncrement={() => incrementTraveler('infants')}
-            onDecrement={() => decrementTraveler('infants')}
-            icon="baby-face"
-          />
-        </Surface>
-
-        {/* Search Button */}
-        <Button
-          mode="contained"
-          style={styles.searchButton}
-          labelStyle={styles.searchButtonText}
-          onPress={() => console.log('Search flights')}
-        >
-          <Icon name="magnify" size={18} color="#fff" style={{ marginRight: 6 }} />
-          Search Flights
-        </Button>
-      </ScrollView>
-    </Animated.View>
+          {/* Search Button */}
+          <TouchableOpacity
+            style={styles.searchButton}
+            onPress={() => console.log('Search flights')}
+          >
+            <LinearGradient
+              colors={['#4F46E5', '#7C3AED']}
+              style={styles.searchButtonGradient}
+            >
+              <Icon name="magnify" size={20} color="#FFFFFF" />
+              <Text style={styles.searchButtonText}>Search Round Trip Flights</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </ScrollView>
+      </Animated.View>
+    </View>
   );
 };
 
@@ -291,175 +345,288 @@ export default RoundTripForm;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F8FAFC',
+  },
+  formContainer: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
   },
   scrollContent: {
-    paddingBottom: 16,
+    padding: 20,
+    paddingBottom: 40,
   },
   section: {
-    marginBottom: 12,
-    borderRadius: 8,
-    backgroundColor: '#fff',
+    marginBottom: 24,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
     overflow: 'hidden',
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    paddingBottom: 6,
+    padding: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#F1F5F9',
+  },
+  sectionIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#EEF2FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
   },
   sectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginLeft: 6,
-    color: '#333',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1E293B',
   },
   routeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    paddingTop: 6,
+    padding: 20,
+    paddingTop: 0,
   },
   inputContainer: {
     flex: 1,
   },
   routeInput: {
-    backgroundColor: '#f8f9fa',
-    height: 48,
+    backgroundColor: '#FFFFFF',
+    height: 56,
+    fontSize: 16,
   },
   swapButton: {
-    padding: 6,
-    marginHorizontal: 6,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 16,
+    marginHorizontal: 12,
+  },
+  swapButtonGradient: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#4F46E5',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   datesContainer: {
-    padding: 12,
-    paddingTop: 6,
+    padding: 20,
+    paddingTop: 0,
+    gap: 12,
   },
   dateCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 6,
-    marginBottom: 6,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
-  dateContent: {
+  dateCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    padding: 20,
+  },
+  dateIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#EEF2FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
   },
   dateTextContainer: {
-    marginLeft: 10,
+    flex: 1,
   },
   dateLabel: {
-    fontSize: 11,
-    color: '#666',
-    marginBottom: 1,
+    fontSize: 14,
+    color: '#64748B',
+    marginBottom: 4,
+    fontWeight: '500',
   },
   dateValue: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#1E293B',
+  },
+  dateArrowContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dateDivider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 6,
+    marginVertical: 8,
   },
   dividerLine: {
     flex: 1,
-    height: 1,
-    backgroundColor: '#e0e0e0',
+    height: 2,
+    backgroundColor: '#E2E8F0',
+  },
+  dividerIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#EEF2FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 12,
   },
   classContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 12,
-    paddingTop: 6,
-    gap: 6,
+    padding: 20,
+    paddingTop: 0,
+    gap: 12,
   },
   classChip: {
-    marginBottom: 6,
-    backgroundColor: '#f8f9fa',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 25,
+    backgroundColor: '#F1F5F9',
+    borderWidth: 2,
+    borderColor: '#E2E8F0',
+    minWidth: (width - 84) / 2,
+    alignItems: 'center',
   },
   selectedClassChip: {
-    backgroundColor: '#6200ee',
+    borderColor: '#4F46E5',
+    backgroundColor: 'transparent',
+  },
+  selectedClassGradient: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 23,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: (width - 88) / 2,
   },
   classChipText: {
-    color: '#666',
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#64748B',
   },
   selectedClassChipText: {
-    color: '#fff',
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  travelersContainer: {
+    padding: 20,
+    paddingTop: 0,
+    gap: 16,
   },
   travelerCard: {
-    marginHorizontal: 12,
-    marginBottom: 8,
-    borderRadius: 6,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   travelerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 20,
   },
   travelerInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
+  travelerIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#EEF2FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
   travelerLabel: {
-    marginLeft: 6,
-    fontSize: 13,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1E293B',
+    marginBottom: 2,
+  },
+  travelerSubLabel: {
+    fontSize: 12,
+    color: '#64748B',
     fontWeight: '500',
-    color: '#333',
   },
   counterRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   counterButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#fff',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderWidth: 2,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   disabledButton: {
-    backgroundColor: '#f5f5f5',
-    borderColor: '#e0e0e0',
+    backgroundColor: '#F8FAFC',
+    borderColor: '#E2E8F0',
   },
   counterText: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginHorizontal: 12,
-    color: '#333',
-    minWidth: 18,
+    fontSize: 18,
+    fontWeight: '700',
+    marginHorizontal: 20,
+    color: '#1E293B',
+    minWidth: 24,
     textAlign: 'center',
   },
   searchButton: {
-    marginTop: 16,
-    marginBottom: 12,
-    borderRadius: 8,
-    backgroundColor: '#6200ee',
+    marginTop: 32,
+    marginHorizontal: 4,
+  },
+  searchButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 2,
+    paddingVertical: 18,
+    borderRadius: 16,
+    shadowColor: '#4F46E5',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
   },
   searchButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginLeft: 8,
   },
 });
