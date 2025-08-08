@@ -3,15 +3,18 @@ import {
   View, 
   StyleSheet, 
   Platform, 
-  Animated, 
+  Animated,
+  Easing, 
   TouchableOpacity, 
   ScrollView,
   Text,
   TextInput,
-  SafeAreaView
+  SafeAreaView,
+  Modal
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
+// Clean look: no gradients
 
 const OneWayForm = () => {
   const [departureDate, setDepartureDate] = useState(new Date());
@@ -21,6 +24,12 @@ const OneWayForm = () => {
   const [infants, setInfants] = useState(0);
   const [selectedClass, setSelectedClass] = useState('Economy');
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [fromCity, setFromCity] = useState('');
+  const [toCity, setToCity] = useState('');
+  const [swapAnim] = useState(new Animated.Value(0));
+  const [ctaScale] = useState(new Animated.Value(1));
+  const [classSheetVisible, setClassSheetVisible] = useState(false);
+  const [travelerSheetVisible, setTravelerSheetVisible] = useState(false);
 
   const classes = ['Economy', 'Premium Economy', 'Business', 'First Class'];
 
@@ -42,6 +51,51 @@ const OneWayForm = () => {
   const showDatePickerModal = () => {
     setShowDatePicker(true);
   };
+
+  const onSwapRoute = () => {
+    Animated.sequence([
+      Animated.timing(swapAnim, {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(swapAnim, {
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    setFromCity(prevFrom => {
+      const newFrom = toCity;
+      setToCity(prevFrom);
+      return newFrom;
+    });
+  };
+
+  const onPressInCta = () => {
+    Animated.spring(ctaScale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      friction: 6,
+      tension: 120,
+    }).start();
+  };
+
+  const onPressOutCta = () => {
+    Animated.spring(ctaScale, {
+      toValue: 1,
+      useNativeDriver: true,
+      friction: 6,
+      tension: 120,
+    }).start();
+  };
+
+  const swapRotate = swapAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '-180deg'],
+  });
 
   const incrementTraveler = (type) => {
     switch (type) {
@@ -105,11 +159,18 @@ const OneWayForm = () => {
     </View>
   );
 
+  const getTravelerSummary = () => {
+    const adultsLabel = `${adults} Adult${adults !== 1 ? 's' : ''}`;
+    const childrenLabel = `${children} Child${children !== 1 ? 'ren' : ''}`;
+    const infantsLabel = `${infants} Infant${infants !== 1 ? 's' : ''}`;
+    return `${adultsLabel}, ${childrenLabel}, ${infantsLabel}`;
+  };
+
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* From & To Section */}
-        <View style={styles.section}>
+        <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
               <Ionicons name="airplane" size={22} color="#007AFF" />
@@ -119,31 +180,33 @@ const OneWayForm = () => {
           
           <View style={styles.routeContainer}>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>From</Text>
               <View style={styles.inputWrapper}>
                 <Ionicons name="airplane-outline" size={20} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Departure city"
                   placeholderTextColor="#8E8E93"
+                  value={fromCity}
+                  onChangeText={setFromCity}
                 />
               </View>
             </View>
-            
-            <TouchableOpacity style={styles.swapButton}>
-              <View style={styles.swapButtonContainer}>
-                <Ionicons name="swap-horizontal" size={20} color="#007AFF" />
-              </View>
+
+            <TouchableOpacity style={styles.swapCenter} onPress={onSwapRoute}>
+              <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate: swapRotate }] }]}>
+                <Ionicons name="swap-vertical" size={20} color="#007AFF" />
+              </Animated.View>
             </TouchableOpacity>
-            
+
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>To</Text>
               <View style={styles.inputWrapper}>
                 <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Destination city"
                   placeholderTextColor="#8E8E93"
+                  value={toCity}
+                  onChangeText={setToCity}
                 />
               </View>
             </View>
@@ -151,7 +214,7 @@ const OneWayForm = () => {
         </View>
 
         {/* Date Section */}
-        <View style={styles.section}>
+        <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
               <Ionicons name="calendar" size={22} color="#007AFF" />
@@ -190,77 +253,196 @@ const OneWayForm = () => {
           )}
         </View>
 
-        {/* Class Selection */}
-        <View style={styles.section}>
+        {/* Cabin Class - Dropdown / Bottom Sheet */}
+        <View style={[styles.sectionCompact, styles.cabinCard]}>
           <View style={styles.sectionHeader}>
-            <View style={styles.sectionIconContainer}>
+            <View style={[styles.sectionIconContainer, styles.iconCircleLarge]}>
               <Ionicons name="business" size={22} color="#007AFF" />
             </View>
             <Text style={styles.sectionTitle}>Cabin Class</Text>
           </View>
-          
-          <View style={styles.classContainer}>
-            {classes.map((cabinClass) => (
-              <TouchableOpacity
-                key={cabinClass}
-                style={[
-                  styles.classChip,
-                  selectedClass === cabinClass && styles.selectedClassChip
-                ]}
-                onPress={() => setSelectedClass(cabinClass)}
-              >
-                <Text style={[
-                  styles.classChipText,
-                  selectedClass === cabinClass && styles.selectedClassChipText
-                ]}>
-                  {cabinClass}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+
+          <TouchableOpacity
+            style={styles.dropdownTrigger}
+            onPress={() => setClassSheetVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.dropdownTriggerText}>{selectedClass}</Text>
+            <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+          </TouchableOpacity>
         </View>
 
-        {/* Travelers Section */}
-        <View style={styles.section}>
+        <Modal
+          transparent
+          visible={classSheetVisible}
+          animationType="slide"
+          onRequestClose={() => setClassSheetVisible(false)}
+        >
+          <TouchableOpacity style={styles.sheetBackdrop} activeOpacity={1} onPress={() => setClassSheetVisible(false)}>
+            <View style={styles.sheetContainer}>
+              <View style={styles.sheetHandle} />
+              <Text style={styles.sheetTitle}>Select Cabin Class</Text>
+              {classes.map((cabinClass) => (
+                <TouchableOpacity
+                  key={cabinClass}
+                  style={styles.sheetItem}
+                  onPress={() => {
+                    setSelectedClass(cabinClass);
+                    setClassSheetVisible(false);
+                  }}
+                >
+                  <Text style={[styles.sheetItemText, selectedClass === cabinClass && styles.sheetItemTextSelected]}>
+                    {cabinClass}
+                  </Text>
+                  {selectedClass === cabinClass && (
+                    <Ionicons name="checkmark" size={18} color="#0A84FF" />
+                  )}
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity style={styles.sheetCancel} onPress={() => setClassSheetVisible(false)}>
+                <Text style={styles.sheetCancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </Modal>
+
+        {/* Travelers - Compact Modal */}
+        <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
               <Ionicons name="people" size={22} color="#007AFF" />
             </View>
             <Text style={styles.sectionTitle}>Travelers</Text>
           </View>
-          
-          <View style={styles.travelersContainer}>
-            <TravelerCounter
-              label="Adults"
-              count={adults}
-              onIncrement={() => incrementTraveler('adults')}
-              onDecrement={() => decrementTraveler('adults')}
-              icon="person"
-            />
-            
-            <TravelerCounter
-              label="Children"
-              count={children}
-              onIncrement={() => incrementTraveler('children')}
-              onDecrement={() => decrementTraveler('children')}
-              icon="person-outline"
-            />
-            
-            <TravelerCounter
-              label="Infants"
-              count={infants}
-              onIncrement={() => incrementTraveler('infants')}
-              onDecrement={() => decrementTraveler('infants')}
-              icon="person-circle-outline"
-            />
-          </View>
+
+          <TouchableOpacity
+            style={styles.travelersTrigger}
+            onPress={() => setTravelerSheetVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.travelersTriggerText}>{getTravelerSummary()}</Text>
+            <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+          </TouchableOpacity>
         </View>
 
+        <Modal
+          transparent
+          visible={travelerSheetVisible}
+          animationType="slide"
+          onRequestClose={() => setTravelerSheetVisible(false)}
+        >
+          <TouchableOpacity style={styles.sheetBackdrop} activeOpacity={1} onPress={() => setTravelerSheetVisible(false)}>
+            <View style={styles.sheetContainer}>
+              <View style={styles.sheetHandle} />
+              <Text style={styles.sheetTitle}>Select Travelers</Text>
+
+              {/* Adults Row */}
+              <View style={styles.sheetRow}>
+                <View style={styles.sheetRowLeft}>
+                  <View style={styles.sheetRowAvatar}>
+                    <Ionicons name="person" size={20} color="#0A84FF" />
+                  </View>
+                  <View>
+                    <Text style={styles.sheetRowTitle}>Adults</Text>
+                    <Text style={styles.sheetRowSubtitle}>12+ years</Text>
+                  </View>
+                </View>
+                <View style={styles.sheetControls}>
+                  <TouchableOpacity
+                    style={[styles.counterButtonSmall, adults <= 1 && styles.disabledButton]}
+                    onPress={() => setAdults(Math.max(adults - 1, 1))}
+                    disabled={adults <= 1}
+                  >
+                    <Ionicons name="remove" size={16} color={adults <= 1 ? '#B0B4BD' : '#007AFF'} />
+                  </TouchableOpacity>
+                  <Text style={styles.counterTextSmall}>{adults}</Text>
+                  <TouchableOpacity
+                    style={styles.counterButtonSmall}
+                    onPress={() => setAdults(Math.min(adults + 1, 9))}
+                  >
+                    <Ionicons name="add" size={16} color="#007AFF" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Children Row */}
+              <View style={styles.sheetRow}>
+                <View style={styles.sheetRowLeft}>
+                  <View style={styles.sheetRowAvatar}>
+                    <Ionicons name="person-outline" size={20} color="#0A84FF" />
+                  </View>
+                  <View>
+                    <Text style={styles.sheetRowTitle}>Children</Text>
+                    <Text style={styles.sheetRowSubtitle}>2-11 years</Text>
+                  </View>
+                </View>
+                <View style={styles.sheetControls}>
+                  <TouchableOpacity
+                    style={[styles.counterButtonSmall, children <= 0 && styles.disabledButton]}
+                    onPress={() => setChildren(Math.max(children - 1, 0))}
+                    disabled={children <= 0}
+                  >
+                    <Ionicons name="remove" size={16} color={children <= 0 ? '#B0B4BD' : '#007AFF'} />
+                  </TouchableOpacity>
+                  <Text style={styles.counterTextSmall}>{children}</Text>
+                  <TouchableOpacity
+                    style={styles.counterButtonSmall}
+                    onPress={() => setChildren(Math.min(children + 1, 8))}
+                  >
+                    <Ionicons name="add" size={16} color="#007AFF" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Infants Row */}
+              <View style={styles.sheetRow}>
+                <View style={styles.sheetRowLeft}>
+                  <View style={styles.sheetRowAvatar}>
+                    <Ionicons name="person-circle-outline" size={20} color="#0A84FF" />
+                  </View>
+                  <View>
+                    <Text style={styles.sheetRowTitle}>Infants</Text>
+                    <Text style={styles.sheetRowSubtitle}>0-2 years</Text>
+                  </View>
+                </View>
+                <View style={styles.sheetControls}>
+                  <TouchableOpacity
+                    style={[styles.counterButtonSmall, infants <= 0 && styles.disabledButton]}
+                    onPress={() => setInfants(Math.max(infants - 1, 0))}
+                    disabled={infants <= 0}
+                  >
+                    <Ionicons name="remove" size={16} color={infants <= 0 ? '#B0B4BD' : '#007AFF'} />
+                  </TouchableOpacity>
+                  <Text style={styles.counterTextSmall}>{infants}</Text>
+                  <TouchableOpacity
+                    style={styles.counterButtonSmall}
+                    onPress={() => setInfants(Math.min(infants + 1, 4))}
+                  >
+                    <Ionicons name="add" size={16} color="#007AFF" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <TouchableOpacity style={styles.sheetPrimary} onPress={() => setTravelerSheetVisible(false)}>
+                <Text style={styles.sheetPrimaryText}>Done</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </Modal>
+
         {/* Search Button */}
-        <TouchableOpacity style={styles.searchButton} onPress={() => console.log('Search flights')}>
-          <Ionicons name="search" size={20} color="#FFFFFF" />
-          <Text style={styles.searchButtonText}>Search Flights</Text>
-        </TouchableOpacity>
+        <Animated.View style={{ transform: [{ scale: ctaScale }] }}>
+          <TouchableOpacity
+            style={styles.searchButton}
+            activeOpacity={0.9}
+            onPressIn={onPressInCta}
+            onPressOut={onPressOutCta}
+            onPress={() => console.log('Search flights')}
+          >
+            <Ionicons name="search" size={18} color="#FFFFFF" />
+            <Text style={styles.searchButtonText}>Search Flights</Text>
+          </TouchableOpacity>
+        </Animated.View>
       </ScrollView>
     </Animated.View>
   );
@@ -289,11 +471,20 @@ const styles = StyleSheet.create({
     elevation: 4,
     overflow: 'hidden',
   },
+  sectionCompact: {
+    marginBottom: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    overflow: 'hidden',
+  },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    paddingBottom: 12,
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F7',
   },
@@ -306,33 +497,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
+  iconCircleLarge: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#EBF3FF',
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   routeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: 12,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    paddingHorizontal: 12,
+    paddingTop: 10,
+    paddingBottom: 12,
   },
   inputContainer: {
     flex: 1,
   },
   inputLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1C1C1E',
-    marginBottom: 8,
+    display: 'none',
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
   },
   inputIcon: {
     marginRight: 12,
@@ -344,47 +541,73 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   swapButton: {
-    marginHorizontal: 12,
+    marginHorizontal: 10,
   },
   swapButtonContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#F0F8FF',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+  },
+  swapCenter: {
+    alignSelf: 'center',
+    marginVertical: 8,
+  },
+  swapCenterInner: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
   dateCard: {
-    margin: 16,
-    marginTop: 12,
+    marginHorizontal: 12,
+    marginTop: 10,
+    marginBottom: 12,
   },
   dateCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
   },
   dateIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#F0F8FF',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
   },
   dateTextContainer: {
     flex: 1,
   },
   dateLabel: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#8E8E93',
-    marginBottom: 4,
+    marginBottom: 2,
     fontWeight: '500',
   },
   dateValue: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#1C1C1E',
   },
@@ -399,46 +622,246 @@ const styles = StyleSheet.create({
   classContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 16,
-    paddingTop: 12,
+    paddingHorizontal: 12,
+    paddingTop: 10,
+    paddingBottom: 12,
+    gap: 8,
+  },
+  classContainerRedesign: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 10,
     gap: 8,
   },
   classChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 16,
     backgroundColor: '#F2F2F7',
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
+  classChipLarge: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 14,
+    backgroundColor: '#F3F4F8',
+    borderWidth: 1,
+    borderColor: '#E2E5EE',
+  },
   selectedClassChip: {
     backgroundColor: '#007AFF',
     borderColor: '#007AFF',
+  },
+  selectedClassChipLarge: {
+    backgroundColor: '#0A84FF',
+    borderColor: '#0A84FF',
+    shadowColor: '#0A84FF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 2,
   },
   classChipText: {
     fontSize: 14,
     fontWeight: '600',
     color: '#8E8E93',
   },
+  classChipTextLarge: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#8A8F98',
+  },
   selectedClassChipText: {
     color: '#FFFFFF',
   },
-  travelersContainer: {
-    padding: 16,
-    paddingTop: 12,
-    gap: 12,
+  selectedClassChipTextLarge: {
+    color: '#FFFFFF',
   },
-  travelerCard: {
+  cabinCard: {
+    borderRadius: 20,
+  },
+  dropdownTrigger: {
+    marginHorizontal: 12,
+    marginVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: '#F2F2F7',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E5E5EA',
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+  },
+  dropdownTriggerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  sheetBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    justifyContent: 'flex-end',
+  },
+  sheetContainer: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingBottom: 24,
+    paddingTop: 8,
+  },
+  sheetHandle: {
+    alignSelf: 'center',
+    width: 44,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: '#E5E5EA',
+    marginBottom: 8,
+  },
+  sheetTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1C1C1E',
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+  },
+  sheetItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderTopWidth: 1,
+    borderTopColor: '#F2F2F7',
+  },
+  sheetItemText: {
+    fontSize: 16,
+    color: '#1C1C1E',
+    fontWeight: '500',
+  },
+  sheetItemTextSelected: {
+    color: '#0A84FF',
+    fontWeight: '700',
+  },
+  sheetCancel: {
+    marginTop: 6,
+    marginHorizontal: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  sheetCancelText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  travelersTrigger: {
+    marginHorizontal: 12,
+    marginVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+  },
+  travelersTriggerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  sheetRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#F2F2F7',
+  },
+  sheetRowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  sheetRowAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#EEF4FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  sheetRowTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1C1C1E',
+  },
+  sheetRowSubtitle: {
+    fontSize: 12,
+    color: '#8E8E93',
+  },
+  sheetControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  counterButtonSmall: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+  },
+  counterTextSmall: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginHorizontal: 12,
+    color: '#1C1C1E',
+    minWidth: 22,
+    textAlign: 'center',
+  },
+  sheetPrimary: {
+    marginTop: 10,
+    marginHorizontal: 16,
+    backgroundColor: '#0A84FF',
+    borderRadius: 12,
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  sheetPrimaryText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  travelersContainer: {
+    paddingHorizontal: 14,
+    paddingTop: 12,
+    paddingBottom: 14,
+    gap: 12,
+  },
+  travelerCard: {
+    backgroundColor: '#F6F7FA',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#EAECF2',
+    paddingVertical: 6,
   },
   travelerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
   },
   travelerInfo: {
     flexDirection: 'row',
@@ -446,23 +869,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   travelerIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#F0F8FF',
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 14,
+    borderWidth: 1,
+    borderColor: '#E8EAF0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   travelerLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
     color: '#1C1C1E',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   travelerSubLabel: {
-    fontSize: 12,
-    color: '#8E8E93',
+    fontSize: 13,
+    color: '#8C90A1',
     fontWeight: '500',
   },
   counterRow: {
@@ -470,31 +900,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   counterButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E5E5EA',
+    borderColor: '#EAECF2',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 1,
   },
   disabledButton: {
     backgroundColor: '#F2F2F7',
     borderColor: '#E5E5EA',
   },
   counterText: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginHorizontal: 20,
+    fontSize: 20,
+    fontWeight: '800',
+    marginHorizontal: 18,
     color: '#1C1C1E',
     minWidth: 24,
     textAlign: 'center',
@@ -502,24 +929,16 @@ const styles = StyleSheet.create({
   searchButton: {
     backgroundColor: '#007AFF',
     borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16,
-    shadowColor: '#007AFF',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    marginTop: 12,
   },
   searchButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
   },
