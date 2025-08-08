@@ -8,7 +8,8 @@ import {
   ScrollView, 
   Dimensions,
   Text,
-  TextInput
+  TextInput,
+  Modal
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,6 +26,11 @@ const RoundTripForm = () => {
   const [infants, setInfants] = useState(0);
   const [selectedClass, setSelectedClass] = useState('Economy');
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [fromCity, setFromCity] = useState('');
+  const [toCity, setToCity] = useState('');
+  const [swapAnim] = useState(new Animated.Value(0));
+  const [classSheetVisible, setClassSheetVisible] = useState(false);
+  const [travelerSheetVisible, setTravelerSheetVisible] = useState(false);
 
   const classes = ['Economy', 'Premium Economy', 'Business', 'First Class'];
 
@@ -62,6 +68,24 @@ const RoundTripForm = () => {
     setShowReturnPicker(true);
   };
 
+  const onSwapRoute = () => {
+    Animated.sequence([
+      Animated.timing(swapAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(swapAnim, { toValue: 0, duration: 0, useNativeDriver: true }),
+    ]).start();
+    setFromCity(prev => {
+      const newFrom = toCity;
+      setToCity(prev);
+      return newFrom;
+    });
+  };
+
+  const swapRotate = swapAnim.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '-180deg'] });
+
   const incrementTraveler = (type) => {
     switch (type) {
       case 'adults':
@@ -88,6 +112,13 @@ const RoundTripForm = () => {
         setInfants(Math.max(infants - 1, 0));
         break;
     }
+  };
+
+  const getTravelerSummary = () => {
+    const a = `${adults} Adult${adults !== 1 ? 's' : ''}`;
+    const c = `${children} Child${children !== 1 ? 'ren' : ''}`;
+    const i = `${infants} Infant${infants !== 1 ? 's' : ''}`;
+    return `${a}, ${c}, ${i}`;
   };
 
   const TravelerCounter = ({ label, count, onIncrement, onDecrement, icon }) => (
@@ -159,33 +190,35 @@ const RoundTripForm = () => {
               <Text style={styles.sectionTitle}>Flight Route</Text>
             </View>
             
-            <View style={styles.routeContainer}>
+            <View style={styles.routeContainerColumn}>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>From</Text>
                 <View style={styles.inputWrapper}>
                   <Ionicons name="airplane-outline" size={20} color="#8E8E93" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Departure city"
                     placeholderTextColor="#8E8E93"
+                    value={fromCity}
+                    onChangeText={setFromCity}
                   />
                 </View>
               </View>
-              
-              <TouchableOpacity style={styles.swapButton}>
-                <View style={styles.swapButtonContainer}>
-                  <Ionicons name="swap-horizontal" size={20} color="#007AFF" />
-                </View>
+
+              <TouchableOpacity style={styles.swapCenter} onPress={onSwapRoute}>
+                <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate: swapRotate }] }]}>
+                  <Ionicons name="swap-vertical" size={20} color="#007AFF" />
+                </Animated.View>
               </TouchableOpacity>
-              
+
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>To</Text>
                 <View style={styles.inputWrapper}>
                   <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Destination city"
                     placeholderTextColor="#8E8E93"
+                    value={toCity}
+                    onChangeText={setToCity}
                   />
                 </View>
               </View>
@@ -246,7 +279,7 @@ const RoundTripForm = () => {
             )}
           </View>
 
-          {/* Class Selection */}
+          {/* Class Selection - Dropdown */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
@@ -254,29 +287,31 @@ const RoundTripForm = () => {
               </View>
               <Text style={styles.sectionTitle}>Cabin Class</Text>
             </View>
-            
-            <View style={styles.classContainer}>
-              {classes.map((cabinClass) => (
-                <TouchableOpacity
-                  key={cabinClass}
-                  style={[
-                    styles.classChip,
-                    selectedClass === cabinClass && styles.selectedClassChip
-                  ]}
-                  onPress={() => setSelectedClass(cabinClass)}
-                >
-                  <Text style={[
-                    styles.classChipText,
-                    selectedClass === cabinClass && styles.selectedClassChipText
-                  ]}>
-                    {cabinClass}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <TouchableOpacity style={styles.dropdownTrigger} onPress={() => setClassSheetVisible(true)}>
+              <Text style={styles.dropdownTriggerText}>{selectedClass}</Text>
+              <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+            </TouchableOpacity>
           </View>
 
-          {/* Travelers Section */}
+          <Modal transparent visible={classSheetVisible} animationType="slide" onRequestClose={() => setClassSheetVisible(false)}>
+            <TouchableOpacity style={styles.sheetBackdrop} activeOpacity={1} onPress={() => setClassSheetVisible(false)}>
+              <View style={styles.sheetContainer}>
+                <View style={styles.sheetHandle} />
+                <Text style={styles.sheetTitle}>Select Cabin Class</Text>
+                {classes.map(c => (
+                  <TouchableOpacity key={c} style={styles.sheetItem} onPress={() => { setSelectedClass(c); setClassSheetVisible(false); }}>
+                    <Text style={[styles.sheetItemText, selectedClass === c && styles.sheetItemTextSelected]}>{c}</Text>
+                    {selectedClass === c && <Ionicons name="checkmark" size={18} color="#0A84FF" />}
+                  </TouchableOpacity>
+                ))}
+                <TouchableOpacity style={styles.sheetCancel} onPress={() => setClassSheetVisible(false)}>
+                  <Text style={styles.sheetCancelText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          </Modal>
+
+          {/* Travelers - Compact Modal */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
@@ -284,33 +319,75 @@ const RoundTripForm = () => {
               </View>
               <Text style={styles.sectionTitle}>Travelers</Text>
             </View>
-            
-            <View style={styles.travelersContainer}>
-              <TravelerCounter
-                label="Adults"
-                count={adults}
-                onIncrement={() => incrementTraveler('adults')}
-                onDecrement={() => decrementTraveler('adults')}
-                icon="person"
-              />
-              
-              <TravelerCounter
-                label="Children"
-                count={children}
-                onIncrement={() => incrementTraveler('children')}
-                onDecrement={() => decrementTraveler('children')}
-                icon="person-outline"
-              />
-              
-              <TravelerCounter
-                label="Infants"
-                count={infants}
-                onIncrement={() => incrementTraveler('infants')}
-                onDecrement={() => decrementTraveler('infants')}
-                icon="person-circle-outline"
-              />
-            </View>
+            <TouchableOpacity style={styles.travelersTrigger} onPress={() => setTravelerSheetVisible(true)}>
+              <Text style={styles.travelersTriggerText}>{getTravelerSummary()}</Text>
+              <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+            </TouchableOpacity>
           </View>
+
+          <Modal transparent visible={travelerSheetVisible} animationType="slide" onRequestClose={() => setTravelerSheetVisible(false)}>
+            <TouchableOpacity style={styles.sheetBackdrop} activeOpacity={1} onPress={() => setTravelerSheetVisible(false)}>
+              <View style={styles.sheetContainer}>
+                <View style={styles.sheetHandle} />
+                <Text style={styles.sheetTitle}>Select Travelers</Text>
+
+                {/* Adults */}
+                <View style={styles.sheetRow}>
+                  <View style={styles.sheetRowLeft}>
+                    <View style={styles.sheetRowAvatar}><Ionicons name="person" size={20} color="#0A84FF" /></View>
+                    <View><Text style={styles.sheetRowTitle}>Adults</Text><Text style={styles.sheetRowSubtitle}>12+ years</Text></View>
+                  </View>
+                  <View style={styles.sheetControls}>
+                    <TouchableOpacity style={[styles.counterButtonSmall, adults <= 1 && styles.disabledButton]} onPress={() => setAdults(Math.max(adults - 1, 1))} disabled={adults <= 1}>
+                      <Ionicons name="remove" size={16} color={adults <= 1 ? '#B0B4BD' : '#007AFF'} />
+                    </TouchableOpacity>
+                    <Text style={styles.counterTextSmall}>{adults}</Text>
+                    <TouchableOpacity style={styles.counterButtonSmall} onPress={() => setAdults(Math.min(adults + 1, 9))}>
+                      <Ionicons name="add" size={16} color="#007AFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Children */}
+                <View style={styles.sheetRow}>
+                  <View style={styles.sheetRowLeft}>
+                    <View style={styles.sheetRowAvatar}><Ionicons name="person-outline" size={20} color="#0A84FF" /></View>
+                    <View><Text style={styles.sheetRowTitle}>Children</Text><Text style={styles.sheetRowSubtitle}>2-11 years</Text></View>
+                  </View>
+                  <View style={styles.sheetControls}>
+                    <TouchableOpacity style={[styles.counterButtonSmall, children <= 0 && styles.disabledButton]} onPress={() => setChildren(Math.max(children - 1, 0))} disabled={children <= 0}>
+                      <Ionicons name="remove" size={16} color={children <= 0 ? '#B0B4BD' : '#007AFF'} />
+                    </TouchableOpacity>
+                    <Text style={styles.counterTextSmall}>{children}</Text>
+                    <TouchableOpacity style={styles.counterButtonSmall} onPress={() => setChildren(Math.min(children + 1, 8))}>
+                      <Ionicons name="add" size={16} color="#007AFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Infants */}
+                <View style={styles.sheetRow}>
+                  <View style={styles.sheetRowLeft}>
+                    <View style={styles.sheetRowAvatar}><Ionicons name="person-circle-outline" size={20} color="#0A84FF" /></View>
+                    <View><Text style={styles.sheetRowTitle}>Infants</Text><Text style={styles.sheetRowSubtitle}>0-2 years</Text></View>
+                  </View>
+                  <View style={styles.sheetControls}>
+                    <TouchableOpacity style={[styles.counterButtonSmall, infants <= 0 && styles.disabledButton]} onPress={() => setInfants(Math.max(infants - 1, 0))} disabled={infants <= 0}>
+                      <Ionicons name="remove" size={16} color={infants <= 0 ? '#B0B4BD' : '#007AFF'} />
+                    </TouchableOpacity>
+                    <Text style={styles.counterTextSmall}>{infants}</Text>
+                    <TouchableOpacity style={styles.counterButtonSmall} onPress={() => setInfants(Math.min(infants + 1, 4))}>
+                      <Ionicons name="add" size={16} color="#007AFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <TouchableOpacity style={styles.sheetPrimary} onPress={() => setTravelerSheetVisible(false)}>
+                  <Text style={styles.sheetPrimaryText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          </Modal>
 
           {/* Search Button */}
           <TouchableOpacity style={styles.searchButton} onPress={() => console.log('Search round trip flights')}>
@@ -379,6 +456,16 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 12,
   },
+  // New column layout for stacked From/To with right-overlapping swap
+  routeContainerColumn: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    paddingHorizontal: 16,
+    paddingTop: 6,
+    paddingBottom: 8,
+    gap: 6,
+    position: 'relative',
+  },
   inputContainer: {
     flex: 1,
   },
@@ -416,11 +503,147 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // Right-overlapping swap button
+  swapCenter: {
+    position: 'absolute',
+    right: 16,
+    top: '50%',
+    marginTop: -20,
+    zIndex: 2,
+    elevation: 3,
+  },
+  swapCenterInner: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+  },
   datesContainer: {
     padding: 16,
     paddingTop: 12,
     gap: 12,
   },
+  // Dropdown trigger (Cabin Class)
+  dropdownTrigger: {
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  dropdownTriggerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  // Shared bottom sheet styles
+  sheetBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    justifyContent: 'flex-end',
+  },
+  sheetContainer: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingBottom: 24,
+    paddingTop: 8,
+  },
+  sheetHandle: {
+    alignSelf: 'center',
+    width: 44,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: '#E5E5EA',
+    marginBottom: 8,
+  },
+  sheetTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1C1C1E',
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+  },
+  sheetItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderTopWidth: 1,
+    borderTopColor: '#F2F2F7',
+  },
+  sheetItemText: {
+    fontSize: 16,
+    color: '#1C1C1E',
+    fontWeight: '500',
+  },
+  sheetItemTextSelected: {
+    color: '#0A84FF',
+    fontWeight: '700',
+  },
+  sheetCancel: {
+    marginTop: 6,
+    marginHorizontal: 16,
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  sheetCancelText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  // Travelers compact trigger
+  travelersTrigger: {
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  travelersTriggerText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  sheetRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#F2F2F7',
+  },
+  sheetRowLeft: { flexDirection: 'row', alignItems: 'center' },
+  sheetRowAvatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#EEF4FF', alignItems: 'center', justifyContent: 'center', marginRight: 10 },
+  sheetRowTitle: { fontSize: 15, fontWeight: '700', color: '#1C1C1E' },
+  sheetRowSubtitle: { fontSize: 12, color: '#8E8E93' },
+  sheetControls: { flexDirection: 'row', alignItems: 'center' },
+  counterButtonSmall: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#E5E5EA' },
+  counterTextSmall: { fontSize: 16, fontWeight: '700', marginHorizontal: 12, color: '#1C1C1E', minWidth: 22, textAlign: 'center' },
+  sheetPrimary: { marginTop: 10, marginHorizontal: 16, backgroundColor: '#0A84FF', borderRadius: 12, alignItems: 'center', paddingVertical: 12 },
+  sheetPrimaryText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
   dateCard: {
     backgroundColor: '#F2F2F7',
     borderRadius: 12,

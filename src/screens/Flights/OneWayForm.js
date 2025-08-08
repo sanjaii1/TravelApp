@@ -3,7 +3,7 @@ import {
   View, 
   StyleSheet, 
   Platform, 
-  Animated,
+  Animated, 
   Easing, 
   TouchableOpacity, 
   ScrollView,
@@ -191,13 +191,13 @@ const OneWayForm = () => {
                 />
               </View>
             </View>
-
+            
             <TouchableOpacity style={styles.swapCenter} onPress={onSwapRoute}>
               <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate: swapRotate }] }]}>
                 <Ionicons name="swap-vertical" size={20} color="#007AFF" />
               </Animated.View>
             </TouchableOpacity>
-
+            
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
                 <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
@@ -261,7 +261,7 @@ const OneWayForm = () => {
             </View>
             <Text style={styles.sectionTitle}>Cabin Class</Text>
           </View>
-
+          
           <TouchableOpacity
             style={styles.dropdownTrigger}
             onPress={() => setClassSheetVisible(true)}
@@ -282,9 +282,9 @@ const OneWayForm = () => {
             <View style={styles.sheetContainer}>
               <View style={styles.sheetHandle} />
               <Text style={styles.sheetTitle}>Select Cabin Class</Text>
-              {classes.map((cabinClass) => (
-                <TouchableOpacity
-                  key={cabinClass}
+            {classes.map((cabinClass) => (
+              <TouchableOpacity
+                key={cabinClass}
                   style={styles.sheetItem}
                   onPress={() => {
                     setSelectedClass(cabinClass);
@@ -292,8 +292,8 @@ const OneWayForm = () => {
                   }}
                 >
                   <Text style={[styles.sheetItemText, selectedClass === cabinClass && styles.sheetItemTextSelected]}>
-                    {cabinClass}
-                  </Text>
+                  {cabinClass}
+                </Text>
                   {selectedClass === cabinClass && (
                     <Ionicons name="checkmark" size={18} color="#0A84FF" />
                   )}
@@ -302,7 +302,7 @@ const OneWayForm = () => {
               <TouchableOpacity style={styles.sheetCancel} onPress={() => setClassSheetVisible(false)}>
                 <Text style={styles.sheetCancelText}>Cancel</Text>
               </TouchableOpacity>
-            </View>
+          </View>
           </TouchableOpacity>
         </Modal>
 
@@ -314,7 +314,7 @@ const OneWayForm = () => {
             </View>
             <Text style={styles.sectionTitle}>Travelers</Text>
           </View>
-
+          
           <TouchableOpacity
             style={styles.travelersTrigger}
             onPress={() => setTravelerSheetVisible(true)}
@@ -420,8 +420,8 @@ const OneWayForm = () => {
                   >
                     <Ionicons name="add" size={16} color="#007AFF" />
                   </TouchableOpacity>
-                </View>
-              </View>
+          </View>
+        </View>
 
               <TouchableOpacity style={styles.sheetPrimary} onPress={() => setTravelerSheetVisible(false)}>
                 <Text style={styles.sheetPrimaryText}>Done</Text>
@@ -440,8 +440,8 @@ const OneWayForm = () => {
             onPress={() => console.log('Search flights')}
           >
             <Ionicons name="search" size={18} color="#FFFFFF" />
-            <Text style={styles.searchButtonText}>Search Flights</Text>
-          </TouchableOpacity>
+          <Text style={styles.searchButtonText}>Search Flights</Text>
+        </TouchableOpacity>
         </Animated.View>
       </ScrollView>
     </Animated.View>
@@ -512,8 +512,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'stretch',
     paddingHorizontal: 12,
-    paddingTop: 10,
-    paddingBottom: 12,
+    paddingTop: 6,
+    paddingBottom: 8,
+    position: 'relative',
+    gap: 6,
   },
   inputContainer: {
     flex: 1,
@@ -527,7 +529,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
@@ -554,23 +556,27 @@ const styles = StyleSheet.create({
     borderColor: '#E5E5EA',
   },
   swapCenter: {
-    alignSelf: 'center',
-    marginVertical: 8,
+    position: 'absolute',
+    right: 12,
+    top: '50%',
+    marginTop: -20,
+    zIndex: 2,
+    elevation: 3,
   },
   swapCenterInner: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#E5E5EA',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 2,
   },
   dateCard: {
     marginHorizontal: 12,
