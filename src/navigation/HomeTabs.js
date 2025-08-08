@@ -3,37 +3,26 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FlightHome from '../screens/Flights/FlightHome';
 import CabHome from '../screens/Cabs/CabHome';
 import HotelHome from '../screens/Hotels/HotelHome';
-import { Ionicons, Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity, Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeTabs({ navigation }) {
-  const renderHeader = () => ({
-    title: 'FairYaatra',
-    headerTitleAlign: 'left',
-    headerTitleStyle: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      color: '#007AFF',
-    },
-    headerRight: () => (
-      <React.Fragment>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Profile')}
-          style={{ marginRight: 15 }}
-        >
-          <Ionicons name="person-circle-outline" size={26} color="#007AFF" />
-        </TouchableOpacity>
-      </React.Fragment>
-    ),
-  });
+  const titleMap = { Flights: 'Flight', Cabs: 'Cab', Hotels: 'Hotel' };
 
   return (
     <Tab.Navigator
       initialRouteName="Flights"
       screenOptions={({ route }) => ({
-        ...renderHeader(),
+        headerTitle: titleMap[route.name] || route.name,
+        headerTitleAlign: 'left',
+        headerTitleStyle: { fontSize: 22, fontWeight: 'bold', color: '#007AFF' },
+        headerRight: () => (
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={{ marginRight: 15 }}>
+            <Ionicons name="person-circle-outline" size={26} color="#007AFF" />
+          </TouchableOpacity>
+        ),
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
@@ -47,9 +36,9 @@ export default function HomeTabs({ navigation }) {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Flights" component={FlightHome} />
-      <Tab.Screen name="Cabs" component={CabHome} />
-      <Tab.Screen name="Hotels" component={HotelHome} />
+      <Tab.Screen name="Flights" component={FlightHome} options={{ tabBarLabel: 'Flight' }} />
+      <Tab.Screen name="Cabs" component={CabHome} options={{ tabBarLabel: 'Cab' }} />
+      <Tab.Screen name="Hotels" component={HotelHome} options={{ tabBarLabel: 'Hotel' }} />
     </Tab.Navigator>
   );
 }
