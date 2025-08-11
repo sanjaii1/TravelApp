@@ -173,7 +173,7 @@ const OneWayForm = () => {
         <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
-              <Ionicons name="airplane" size={22} color="#007AFF" />
+              <Ionicons name="airplane" size={18} color="#007AFF" />
             </View>
             <Text style={styles.sectionTitle}>Flight Route</Text>
           </View>
@@ -181,7 +181,7 @@ const OneWayForm = () => {
           <View style={styles.routeContainer}>
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Ionicons name="airplane-outline" size={20} color="#8E8E93" style={styles.inputIcon} />
+                <Ionicons name="airplane-outline" size={16} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Departure city"
@@ -193,14 +193,14 @@ const OneWayForm = () => {
             </View>
             
             <TouchableOpacity style={styles.swapCenter} onPress={onSwapRoute}>
-              <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate: swapRotate }] }]}>
-                <Ionicons name="swap-vertical" size={20} color="#007AFF" />
+              <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate: swapRotate }] }]}> 
+                <Ionicons name="swap-vertical" size={18} color="#007AFF" />
               </Animated.View>
             </TouchableOpacity>
             
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
+                <Ionicons name="airplane" size={16} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Destination city"
@@ -217,7 +217,7 @@ const OneWayForm = () => {
         <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
-              <Ionicons name="calendar" size={22} color="#007AFF" />
+              <Ionicons name="calendar" size={18} color="#007AFF" />
             </View>
             <Text style={styles.sectionTitle}>Departure Date</Text>
           </View>
@@ -225,7 +225,7 @@ const OneWayForm = () => {
           <TouchableOpacity style={styles.dateCard} onPress={showDatePickerModal}>
             <View style={styles.dateCardContent}>
               <View style={styles.dateIconContainer}>
-                <Ionicons name="calendar-outline" size={24} color="#007AFF" />
+                <Ionicons name="calendar-outline" size={20} color="#007AFF" />
               </View>
               <View style={styles.dateTextContainer}>
                 <Text style={styles.dateLabel}>Departure</Text>
@@ -237,7 +237,7 @@ const OneWayForm = () => {
                 })}</Text>
               </View>
               <View style={styles.dateArrowContainer}>
-                <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
+                <Ionicons name="chevron-forward" size={16} color="#8E8E93" />
               </View>
             </View>
           </TouchableOpacity>
@@ -257,7 +257,7 @@ const OneWayForm = () => {
         <View style={[styles.sectionCompact, styles.cabinCard]}>
           <View style={styles.sectionHeader}>
             <View style={[styles.sectionIconContainer, styles.iconCircleLarge]}>
-              <Ionicons name="business" size={22} color="#007AFF" />
+              <Ionicons name="business" size={18} color="#007AFF" />
             </View>
             <Text style={styles.sectionTitle}>Cabin Class</Text>
           </View>
@@ -268,7 +268,7 @@ const OneWayForm = () => {
             activeOpacity={0.8}
           >
             <Text style={styles.dropdownTriggerText}>{selectedClass}</Text>
-            <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+            <Ionicons name="chevron-down" size={16} color="#8E8E93" />
           </TouchableOpacity>
         </View>
 
@@ -310,7 +310,7 @@ const OneWayForm = () => {
         <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
-              <Ionicons name="people" size={22} color="#007AFF" />
+              <Ionicons name="people" size={18} color="#007AFF" />
             </View>
             <Text style={styles.sectionTitle}>Travelers</Text>
           </View>
@@ -321,7 +321,7 @@ const OneWayForm = () => {
             activeOpacity={0.8}
           >
             <Text style={styles.travelersTriggerText}>{getTravelerSummary()}</Text>
-            <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+            <Ionicons name="chevron-down" size={16} color="#8E8E93" />
           </TouchableOpacity>
         </View>
 
@@ -439,7 +439,7 @@ const OneWayForm = () => {
             onPressOut={onPressOutCta}
             onPress={() => console.log('Search flights')}
           >
-            <Ionicons name="search" size={18} color="#FFFFFF" />
+            <Ionicons name="search" size={16} color="#FFFFFF" />
           <Text style={styles.searchButtonText}>Search Flights</Text>
         </TouchableOpacity>
         </Animated.View>
@@ -472,9 +472,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   sectionCompact: {
-    marginBottom: 12,
+    marginBottom: 10,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
     overflow: 'hidden',
@@ -482,40 +482,40 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingTop: 12,
-    paddingBottom: 10,
+    paddingHorizontal: 10,
+    paddingTop: 8,
+    paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F7',
   },
   sectionIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 10,
   },
   iconCircleLarge: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#EBF3FF',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   routeContainer: {
     flexDirection: 'column',
     alignItems: 'stretch',
-    paddingHorizontal: 12,
-    paddingTop: 6,
-    paddingBottom: 8,
+    paddingHorizontal: 10,
+    paddingTop: 4,
+    paddingBottom: 6,
     position: 'relative',
-    gap: 6,
+    gap: 4,
   },
   inputContainer: {
     flex: 1,
@@ -527,18 +527,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
   inputIcon: {
-    marginRight: 12,
+    marginRight: 10,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
     color: '#1C1C1E',
     paddingVertical: 0,
   },
@@ -559,14 +559,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 12,
     top: '50%',
-    marginTop: -20,
+    marginTop: -16,
     zIndex: 2,
     elevation: 3,
   },
   swapCenterInner: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -579,27 +579,27 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   dateCard: {
-    marginHorizontal: 12,
-    marginTop: 10,
-    marginBottom: 12,
+    marginHorizontal: 10,
+    marginTop: 8,
+    marginBottom: 10,
   },
   dateCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
-    borderRadius: 10,
-    padding: 12,
+    borderRadius: 8,
+    padding: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
   dateIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
@@ -607,20 +607,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateLabel: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#8E8E93',
-    marginBottom: 2,
+    marginBottom: 1,
     fontWeight: '500',
   },
   dateValue: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   dateArrowContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -687,23 +687,23 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   cabinCard: {
-    borderRadius: 20,
+    borderRadius: 16,
   },
   dropdownTrigger: {
-    marginHorizontal: 12,
-    marginVertical: 12,
+    marginHorizontal: 10,
+    marginVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
-    paddingHorizontal: 14,
-    paddingVertical: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   dropdownTriggerText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
@@ -714,37 +714,37 @@ const styles = StyleSheet.create({
   },
   sheetContainer: {
     backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingBottom: 24,
-    paddingTop: 8,
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+    paddingBottom: 18,
+    paddingTop: 6,
   },
   sheetHandle: {
     alignSelf: 'center',
-    width: 44,
-    height: 5,
-    borderRadius: 3,
+    width: 36,
+    height: 4,
+    borderRadius: 2,
     backgroundColor: '#E5E5EA',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   sheetTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
     color: '#1C1C1E',
-    paddingHorizontal: 16,
-    paddingBottom: 8,
+    paddingHorizontal: 14,
+    paddingBottom: 6,
   },
   sheetItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: '#F2F2F7',
   },
   sheetItemText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#1C1C1E',
     fontWeight: '500',
   },
@@ -754,32 +754,32 @@ const styles = StyleSheet.create({
   },
   sheetCancel: {
     marginTop: 6,
-    marginHorizontal: 16,
+    marginHorizontal: 14,
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    borderRadius: 10,
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 10,
   },
   sheetCancelText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   travelersTrigger: {
-    marginHorizontal: 12,
-    marginVertical: 12,
+    marginHorizontal: 10,
+    marginVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
-    paddingHorizontal: 14,
-    paddingVertical: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   travelersTriggerText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
@@ -787,8 +787,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: '#F2F2F7',
   },
@@ -797,21 +797,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sheetRowAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: '#EEF4FF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 8,
   },
   sheetRowTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: '#1C1C1E',
   },
   sheetRowSubtitle: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#8E8E93',
   },
   sheetControls: {
@@ -819,9 +819,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   counterButtonSmall: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -829,45 +829,45 @@ const styles = StyleSheet.create({
     borderColor: '#E5E5EA',
   },
   counterTextSmall: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
-    marginHorizontal: 12,
+    marginHorizontal: 10,
     color: '#1C1C1E',
-    minWidth: 22,
+    minWidth: 20,
     textAlign: 'center',
   },
   sheetPrimary: {
-    marginTop: 10,
-    marginHorizontal: 16,
+    marginTop: 8,
+    marginHorizontal: 14,
     backgroundColor: '#0A84FF',
-    borderRadius: 12,
+    borderRadius: 10,
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 10,
   },
   sheetPrimaryText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
   },
   travelersContainer: {
-    paddingHorizontal: 14,
-    paddingTop: 12,
-    paddingBottom: 14,
-    gap: 12,
+    paddingHorizontal: 12,
+    paddingTop: 10,
+    paddingBottom: 12,
+    gap: 10,
   },
   travelerCard: {
     backgroundColor: '#F6F7FA',
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#EAECF2',
-    paddingVertical: 6,
+    paddingVertical: 4,
   },
   travelerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    paddingVertical: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   travelerInfo: {
     flexDirection: 'row',
@@ -875,13 +875,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   travelerIconContainer: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 14,
+    marginRight: 12,
     borderWidth: 1,
     borderColor: '#E8EAF0',
     shadowColor: '#000',
@@ -891,13 +891,13 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   travelerLabel: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
     color: '#1C1C1E',
     marginBottom: 4,
   },
   travelerSubLabel: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#8C90A1',
     fontWeight: '500',
   },
@@ -906,9 +906,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   counterButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -925,27 +925,27 @@ const styles = StyleSheet.create({
     borderColor: '#E5E5EA',
   },
   counterText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
-    marginHorizontal: 18,
+    marginHorizontal: 14,
     color: '#1C1C1E',
-    minWidth: 24,
+    minWidth: 22,
     textAlign: 'center',
   },
   searchButton: {
     backgroundColor: '#007AFF',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
+    marginTop: 10,
   },
   searchButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
-    marginLeft: 8,
+    marginLeft: 6,
   },
 });

@@ -179,7 +179,7 @@ const MultiCityScreen = () => {
         <View style={styles.segmentHeader}>
           <View style={styles.segmentTitle}>
             <View style={styles.segmentIconContainer}>
-              <Ionicons name="airplane" size={20} color="#007AFF" />
+              <Ionicons name="airplane" size={18} color="#007AFF" />
             </View>
             <Text style={styles.segmentTitleText}>Flight {index + 1}</Text>
           </View>
@@ -196,7 +196,7 @@ const MultiCityScreen = () => {
           <View style={styles.routeContainerColumn}>
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Ionicons name="airplane-outline" size={20} color="#8E8E93" style={styles.inputIcon} />
+                <Ionicons name="airplane-outline" size={16} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Departure city"
@@ -209,13 +209,13 @@ const MultiCityScreen = () => {
 
             <TouchableOpacity style={styles.swapCenter} onPress={onSwap}>
               <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate }] }]}>
-                <Ionicons name="swap-vertical" size={20} color="#007AFF" />
+                <Ionicons name="swap-vertical" size={18} color="#007AFF" />
               </Animated.View>
             </TouchableOpacity>
 
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Ionicons name="airplane" size={20} color="#8E8E93" style={styles.inputIcon} />
+                <Ionicons name="airplane" size={16} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Destination city"
@@ -230,7 +230,7 @@ const MultiCityScreen = () => {
           <TouchableOpacity style={styles.dateCard} onPress={() => showDatePicker(segment.id)}>
             <View style={styles.dateCardContent}>
               <View style={styles.dateIconContainer}>
-                <Ionicons name="calendar-outline" size={24} color="#007AFF" />
+                <Ionicons name="calendar-outline" size={20} color="#007AFF" />
               </View>
               <View style={styles.dateTextContainer}>
                 <Text style={styles.dateLabel}>Departure Date</Text>
@@ -239,7 +239,7 @@ const MultiCityScreen = () => {
                 })}</Text>
               </View>
               <View style={styles.dateArrowContainer}>
-                <Ionicons name="chevron-forward" size={20} color="#8E8E93" />
+                <Ionicons name="chevron-forward" size={16} color="#8E8E93" />
               </View>
             </View>
           </TouchableOpacity>
@@ -266,7 +266,7 @@ const MultiCityScreen = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Ionicons name="map" size={22} color="#007AFF" />
+                <Ionicons name="map" size={18} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Flight Segments</Text>
             </View>
@@ -283,7 +283,7 @@ const MultiCityScreen = () => {
               
               <TouchableOpacity style={styles.addSegmentButton} onPress={addSegment}>
                 <View style={styles.addSegmentContainer}>
-                  <Ionicons name="add-circle-outline" size={24} color="#007AFF" />
+                  <Ionicons name="add-circle-outline" size={20} color="#007AFF" />
                   <Text style={styles.addSegmentText}>Add Another Flight</Text>
                 </View>
               </TouchableOpacity>
@@ -294,13 +294,13 @@ const MultiCityScreen = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Ionicons name="business" size={22} color="#007AFF" />
+                <Ionicons name="business" size={18} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Cabin Class</Text>
             </View>
             <TouchableOpacity style={styles.dropdownTrigger} onPress={() => setClassSheetVisible(true)}>
               <Text style={styles.dropdownTriggerText}>{selectedClass}</Text>
-              <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+              <Ionicons name="chevron-down" size={16} color="#8E8E93" />
             </TouchableOpacity>
           </View>
 
@@ -326,13 +326,13 @@ const MultiCityScreen = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionIconContainer}>
-                <Ionicons name="people" size={22} color="#007AFF" />
+                <Ionicons name="people" size={18} color="#007AFF" />
               </View>
               <Text style={styles.sectionTitle}>Travelers</Text>
             </View>
             <TouchableOpacity style={styles.travelersTrigger} onPress={() => setTravelerSheetVisible(true)}>
               <Text style={styles.travelersTriggerText}>{getTravelerSummary()}</Text>
-              <Ionicons name="chevron-down" size={18} color="#8E8E93" />
+              <Ionicons name="chevron-down" size={16} color="#8E8E93" />
             </TouchableOpacity>
           </View>
 
@@ -402,7 +402,7 @@ const MultiCityScreen = () => {
 
           {/* Search Button */}
           <TouchableOpacity style={styles.searchButton} onPress={() => console.log('Search multi-city flights')}>
-            <Ionicons name="search" size={20} color="#FFFFFF" />
+            <Ionicons name="search" size={16} color="#FFFFFF" />
             <Text style={styles.searchButtonText}>Search Multi-City Flights</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -426,9 +426,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 14,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 14,
     shadowColor: '#ffffff',
     shadowOffset: {
       width: 0,
@@ -442,33 +442,33 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    paddingBottom: 12,
+    padding: 12,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F7',
   },
   sectionIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 10,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   segmentsContainer: {
-    padding: 16,
-    paddingTop: 12,
-    gap: 12,
+    padding: 12,
+    paddingTop: 10,
+    gap: 10,
   },
   segmentCard: {
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
     overflow: 'hidden',
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
+    padding: 12,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F7',
@@ -487,16 +487,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   segmentIconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
   },
   segmentTitleText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
@@ -504,15 +504,15 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   removeButtonContainer: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: '#FFE5E5',
     alignItems: 'center',
     justifyContent: 'center',
   },
   segmentContent: {
-    padding: 16,
+    padding: 12,
   },
   routeContainer: {
     flexDirection: 'row',
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'stretch',
     marginBottom: 16,
-    gap: 6,
+    gap: 4,
     position: 'relative',
   },
   inputContainer: {
@@ -540,24 +540,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
   inputIcon: {
-    marginRight: 12,
+    marginRight: 10,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
     color: '#1C1C1E',
     paddingVertical: 0,
   },
-  swapCenter: { position: 'absolute', right: 12, top: '50%', marginTop: -20, zIndex: 2, elevation: 3 },
+  swapCenter: { 
+    position: 'absolute', 
+    right: 12, 
+    top: '50%', 
+    marginTop: -16, 
+    zIndex: 2, 
+    elevation: 3 
+  },
   swapCenterInner: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -566,14 +573,14 @@ const styles = StyleSheet.create({
   },
   dateCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
   dateCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: 12,
   },
   dateIconContainer: {
     width: 40,
@@ -588,26 +595,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#8E8E93',
-    marginBottom: 4,
+    marginBottom: 2,
     fontWeight: '500',
   },
   dateValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   dateArrowContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
   },
   addSegmentButton: {
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: '#E5E5EA',
     borderStyle: 'dashed',
@@ -617,50 +624,189 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 16,
     backgroundColor: '#F8F9FA',
   },
   addSegmentText: {
     marginLeft: 8,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#007AFF',
   },
   classContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 16,
-    paddingTop: 12,
+    padding: 12,
+    paddingTop: 10,
     gap: 8,
   },
-  dropdownTrigger: { marginHorizontal: 16, marginTop: 12, marginBottom: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#F2F2F7', borderRadius: 12, borderWidth: 1, borderColor: '#E5E5EA', paddingHorizontal: 16, paddingVertical: 14 },
-  dropdownTriggerText: { fontSize: 16, fontWeight: '600', color: '#1C1C1E' },
-  sheetBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.25)', justifyContent: 'flex-end' },
-  sheetContainer: { backgroundColor: '#FFFFFF', borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingBottom: 24, paddingTop: 8 },
-  sheetHandle: { alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: '#E5E5EA', marginBottom: 8 },
-  sheetTitle: { fontSize: 16, fontWeight: '700', color: '#1C1C1E', paddingHorizontal: 16, paddingBottom: 8 },
-  sheetItem: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 14, borderTopWidth: 1, borderTopColor: '#F2F2F7' },
-  sheetItemText: { fontSize: 16, color: '#1C1C1E', fontWeight: '500' },
-  sheetItemTextSelected: { color: '#0A84FF', fontWeight: '700' },
-  sheetCancel: { marginTop: 6, marginHorizontal: 16, backgroundColor: '#F2F2F7', borderRadius: 12, alignItems: 'center', paddingVertical: 12 },
-  sheetCancelText: { fontSize: 16, fontWeight: '600', color: '#1C1C1E' },
+  dropdownTrigger: { 
+    marginHorizontal: 12, 
+    marginTop: 10, 
+    marginBottom: 12, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    backgroundColor: '#F2F2F7', 
+    borderRadius: 10, 
+    borderWidth: 1, 
+    borderColor: '#E5E5EA', 
+    paddingHorizontal: 12, 
+    paddingVertical: 10 
+  },
+  dropdownTriggerText: { 
+    fontSize: 14, 
+    fontWeight: '600', 
+    color: '#1C1C1E' 
+  },
+  sheetBackdrop: { 
+    flex: 1, 
+    backgroundColor: 'rgba(0,0,0,0.25)', 
+    justifyContent: 'flex-end' 
+  },
+  sheetContainer: { 
+    backgroundColor: '#FFFFFF', 
+    borderTopLeftRadius: 14, 
+    borderTopRightRadius: 14, 
+    paddingBottom: 18, 
+    paddingTop: 6 
+  },
+  sheetHandle: { 
+    alignSelf: 'center', 
+    width: 36, 
+    height: 4, 
+    borderRadius: 2, 
+    backgroundColor: '#E5E5EA', 
+    marginBottom: 6 
+  },
+  sheetTitle: { 
+    fontSize: 15, 
+    fontWeight: '700', 
+    color: '#1C1C1E', 
+    paddingHorizontal: 14, 
+    paddingBottom: 6 
+  },
+  sheetItem: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 14, 
+    paddingVertical: 10, 
+    borderTopWidth: 1, 
+    borderTopColor: '#F2F2F7' 
+  },
+  sheetItemText: { 
+    fontSize: 14, 
+    color: '#1C1C1E', 
+    fontWeight: '500' 
+  },
+  sheetItemTextSelected: { 
+    color: '#0A84FF', 
+    fontWeight: '700' 
+  },
+  sheetCancel: { 
+    marginTop: 6, 
+    marginHorizontal: 14, 
+    backgroundColor: '#F2F2F7', 
+    borderRadius: 10, 
+    alignItems: 'center', 
+    paddingVertical: 10 
+  },
+  sheetCancelText: { 
+    fontSize: 14, 
+    fontWeight: '600', 
+    color: '#1C1C1E' 
+  },
 
-  travelersTrigger: { marginHorizontal: 16, marginTop: 12, marginBottom: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#F2F2F7', borderRadius: 12, borderWidth: 1, borderColor: '#E5E5EA', paddingHorizontal: 16, paddingVertical: 14 },
-  travelersTriggerText: { fontSize: 16, fontWeight: '600', color: '#1C1C1E' },
-  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#F2F2F7' },
-  sheetRowLeft: { flexDirection: 'row', alignItems: 'center' },
-  sheetRowAvatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#EEF4FF', alignItems: 'center', justifyContent: 'center', marginRight: 10 },
-  sheetRowTitle: { fontSize: 15, fontWeight: '700', color: '#1C1C1E' },
-  sheetRowSubtitle: { fontSize: 12, color: '#8E8E93' },
-  sheetControls: { flexDirection: 'row', alignItems: 'center' },
-  counterButtonSmall: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#E5E5EA' },
-  counterTextSmall: { fontSize: 16, fontWeight: '700', marginHorizontal: 12, color: '#1C1C1E', minWidth: 22, textAlign: 'center' },
-  sheetPrimary: { marginTop: 10, marginHorizontal: 16, backgroundColor: '#0A84FF', borderRadius: 12, alignItems: 'center', paddingVertical: 12 },
-  sheetPrimaryText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+  travelersTrigger: { 
+    marginHorizontal: 12, 
+    marginTop: 10, 
+    marginBottom: 12, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    backgroundColor: '#F2F2F7', 
+    borderRadius: 10, 
+    borderWidth: 1, 
+    borderColor: '#E5E5EA', 
+    paddingHorizontal: 12, 
+    paddingVertical: 10 
+  },
+  travelersTriggerText: { 
+    fontSize: 14, 
+    fontWeight: '600', 
+    color: '#1C1C1E' 
+  },
+  sheetRow: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 14, 
+    paddingVertical: 10, 
+    borderTopWidth: 1, 
+    borderTopColor: '#F2F2F7' 
+  },
+  sheetRowLeft: { 
+    flexDirection: 'row', 
+    alignItems: 'center' 
+  },
+  sheetRowAvatar: { 
+    width: 30, 
+    height: 30, 
+    borderRadius: 15, 
+    backgroundColor: '#EEF4FF', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginRight: 8 
+  },
+  sheetRowTitle: { 
+    fontSize: 14, 
+    fontWeight: '700', 
+    color: '#1C1C1E' 
+  },
+  sheetRowSubtitle: { 
+    fontSize: 11, 
+    color: '#8E8E93' 
+  },
+  sheetControls: { 
+    flexDirection: 'row', 
+    alignItems: 'center' 
+  },
+  counterButtonSmall: { 
+    width: 28, 
+    height: 28, 
+    borderRadius: 14, 
+    backgroundColor: '#FFFFFF', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    borderWidth: 1, 
+    borderColor: '#E5E5EA' 
+  },
+  counterTextSmall: { 
+    fontSize: 14, 
+    fontWeight: '700', 
+    marginHorizontal: 10, 
+    color: '#1C1C1E', 
+    minWidth: 20, 
+    textAlign: 'center' 
+  },
+  sheetPrimary: { 
+    marginTop: 8, 
+    marginHorizontal: 14, 
+    backgroundColor: '#0A84FF', 
+    borderRadius: 10, 
+    alignItems: 'center', 
+    paddingVertical: 10 
+  },
+  sheetPrimaryText: { 
+    color: '#FFFFFF', 
+    fontSize: 14, 
+    fontWeight: '700' 
+  },
   classChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 16,
     backgroundColor: '#F2F2F7',
     borderWidth: 1,
     borderColor: '#E5E5EA',
@@ -680,13 +826,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   travelersContainer: {
-    padding: 16,
-    paddingTop: 12,
-    gap: 12,
+    padding: 12,
+    paddingTop: 10,
+    gap: 10,
   },
   travelerCard: {
     backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
@@ -694,7 +840,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
+    padding: 12,
   },
   travelerInfo: {
     flexDirection: 'row',
@@ -702,16 +848,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   travelerIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#F0F8FF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 12,
   },
   travelerLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
     marginBottom: 2,
@@ -726,9 +872,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   counterButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -748,22 +894,22 @@ const styles = StyleSheet.create({
     borderColor: '#E5E5EA',
   },
   counterText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
-    marginHorizontal: 20,
+    marginHorizontal: 16,
     color: '#1C1C1E',
-    minWidth: 24,
+    minWidth: 22,
     textAlign: 'center',
   },
   searchButton: {
     backgroundColor: '#007AFF',
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16,
+    marginTop: 12,
     shadowColor: '#007AFF',
     shadowOffset: {
       width: 0,
@@ -775,8 +921,8 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '600',
-    marginLeft: 8,
+    marginLeft: 6,
   },
 });
