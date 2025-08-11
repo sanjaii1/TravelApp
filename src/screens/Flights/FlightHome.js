@@ -49,6 +49,10 @@ const FlightHome = () => {
           colors={['#007AFF', '#0056CC']}
           style={styles.headerGradient}
         >
+          {/* Decorative background shapes */}
+          <View style={styles.decorShapeLarge} />
+          <View style={styles.decorShapeSmall} />
+
           <View style={styles.headerContent}>
             <View style={styles.logoContainer}>
               <View style={styles.logoCircle}>
@@ -58,36 +62,39 @@ const FlightHome = () => {
             <Text style={styles.headerTitle}>Book Your Flight</Text>
             <Text style={styles.headerSubtitle}>Choose your travel type</Text>
           </View>
+
+          {/* Segmented tabs floating at header bottom */}
+          <View style={styles.tabBarWrapper}>
+            <View style={styles.tabBar}>
+              {TABS.map((tab) => (
+                <TouchableOpacity
+                  key={tab.label}
+                  style={[
+                    styles.tabButton,
+                    activeTab === tab.label && styles.activeTabButton,
+                  ]}
+                  onPress={() => setActiveTab(tab.label)}
+                >
+                  <Icon
+                    name={tab.icon}
+                    size={20}
+                    color={activeTab === tab.label ? '#FFFFFF' : '#007AFF'}
+                    style={styles.tabIcon}
+                  />
+                  <Text style={[
+                    styles.tabLabel,
+                    activeTab === tab.label && styles.activeTabLabel
+                  ]}>
+                    {tab.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
         </LinearGradient>
         
         {/* Content Container */}
         <View style={styles.contentContainer}>
-          {/* Tab Bar */}
-          <View style={styles.tabBar}>
-            {TABS.map((tab) => (
-              <TouchableOpacity
-                key={tab.label}
-                style={[
-                  styles.tabButton,
-                  activeTab === tab.label && styles.activeTabButton,
-                ]}
-                onPress={() => setActiveTab(tab.label)}
-              >
-                <Icon
-                  name={tab.icon}
-                  size={20}
-                  color={activeTab === tab.label ? '#FFFFFF' : '#007AFF'}
-                  style={styles.tabIcon}
-                />
-                <Text style={[
-                  styles.tabLabel,
-                  activeTab === tab.label && styles.activeTabLabel
-                ]}>
-                  {tab.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
           
           {/* Form Container */}
           <View style={styles.formContainer}>
@@ -110,20 +117,38 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerGradient: {
-    paddingTop: 18,
-    paddingBottom: 14,
+    paddingTop: 8,
+    paddingBottom: 30,
     paddingHorizontal: 16,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
+  decorShapeLarge: {
+    position: 'absolute',
+    right: -40,
+    top: -20,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+  },
+  decorShapeSmall: {
+    position: 'absolute',
+    left: -30,
+    bottom: 10,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+  },
   headerContent: {
     alignItems: 'center',
   },
-  logoContainer: { marginBottom: 8 },
+  logoContainer: { marginBottom: 6 },
   logoCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -134,30 +159,36 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 2,
+    marginBottom: 1,
   },
   headerSubtitle: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#E2E8F0',
     textAlign: 'center',
     opacity: 0.9,
-    lineHeight: 16,
+    lineHeight: 14,
   },
   contentContainer: {
     flex: 1,
-    marginTop: -10,
+    marginTop: 14,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     backgroundColor: '#F2F2F7',
     paddingTop: 12,
   },
+  tabBarWrapper: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    bottom: -14,
+  },
   tabBar: {
-    marginHorizontal: 16,
-    marginBottom: 12,
+    marginHorizontal: 0,
+    marginBottom: 0,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     shadowColor: '#000',
@@ -167,14 +198,14 @@ const styles = StyleSheet.create({
     elevation: 2,
     overflow: 'hidden',
     flexDirection: 'row',
-    padding: 3,
+    padding: 2,
   },
   tabButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 6,
     borderRadius: 10,
     backgroundColor: 'transparent',
