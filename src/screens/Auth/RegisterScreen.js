@@ -52,7 +52,7 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.headerSection}>
             <View style={styles.logoContainer}>
               <View style={styles.logoCircle}>
-                <Ionicons name="airplane" size={32} color="#007AFF" />
+                <Ionicons name="airplane" size={24} color="#007AFF" />
               </View>
             </View>
             <Text style={styles.welcomeText}>Create Account</Text>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100%',
@@ -211,62 +211,62 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1C1C1E',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
     shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowRadius: 2,
+    elevation: 1,
   },
   inputIcon: {
-    marginRight: 12,
+    marginRight: 8,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
     color: '#1C1C1E',
     paddingVertical: 0,
   },
   eyeIcon: {
-    padding: 4,
+    padding: 2,
   },
   registerButton: {
     backgroundColor: '#007AFF',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
     shadowColor: '#007AFF',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   registerButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    marginRight: 8,
+    marginRight: 6,
   },
   loginContainer: {
     flexDirection: 'row',
@@ -275,11 +275,11 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   loginText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#8E8E93',
   },
   loginLink: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#007AFF',
     fontWeight: '600',
   },
