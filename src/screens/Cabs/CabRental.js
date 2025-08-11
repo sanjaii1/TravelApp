@@ -14,19 +14,28 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function CabOneWay() {
+export default function CabRental() {
   const [pickupDate, setPickupDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [returnDate, setReturnDate] = useState(new Date(Date.now() + 24 * 60 * 60 * 1000)); // Next day
+  const [showPickupDatePicker, setShowPickupDatePicker] = useState(false);
+  const [showReturnDatePicker, setShowReturnDatePicker] = useState(false);
   const [pickupLocation, setPickupLocation] = useState('');
-  const [dropLocation, setDropLocation] = useState('');
   const [passengers, setPassengers] = useState(1);
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [swapAnim] = useState(new Animated.Value(0));
   const [ctaScale] = useState(new Animated.Value(1));
   const [cabTypeSheetVisible, setCabTypeSheetVisible] = useState(false);
   const [selectedCabType, setSelectedCabType] = useState('Standard');
+  const [rentalHours, setRentalHours] = useState(4);
+  const [rentalPackageSheetVisible, setRentalPackageSheetVisible] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState('4 Hours / 40 KM');
   
   const cabTypes = ['Economy', 'Standard', 'Premium', 'Luxury'];
+  const rentalPackages = [
+    '4 Hours / 40 KM',
+    '8 Hours / 80 KM',
+    '12 Hours / 120 KM',
+    '24 Hours / 240 KM'
+  ];
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -36,37 +45,30 @@ export default function CabOneWay() {
     }).start();
   }, []);
 
-  const onDateChange = (event, selectedDate) => {
-    setShowDatePicker(false);
+  const onPickupDateChange = (event, selectedDate) => {
+    setShowPickupDatePicker(false);
     if (selectedDate) {
       setPickupDate(selectedDate);
+      // Auto-adjust return date if it's before pickup
+      if (returnDate < selectedDate) {
+        setReturnDate(new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000));
+      }
     }
   };
 
-  const showDatePickerModal = () => {
-    setShowDatePicker(true);
+  const onReturnDateChange = (event, selectedDate) => {
+    setShowReturnDatePicker(false);
+    if (selectedDate) {
+      setReturnDate(selectedDate);
+    }
   };
 
-  const onSwapRoute = () => {
-    Animated.sequence([
-      Animated.timing(swapAnim, {
-        toValue: 1,
-        duration: 250,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
-      }),
-      Animated.timing(swapAnim, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }),
-    ]).start();
+  const showPickupDatePickerModal = () => {
+    setShowPickupDatePicker(true);
+  };
 
-    setPickupLocation(prevPickup => {
-      const newPickup = dropLocation;
-      setDropLocation(prevPickup);
-      return newPickup;
-    });
+  const showReturnDatePickerModal = () => {
+    setShowReturnDatePicker(true);
   };
 
   const onPressInCta = () => {
@@ -87,11 +89,6 @@ export default function CabOneWay() {
     }).start();
   };
 
-  const swapRotate = swapAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '-180deg'],
-  });
-
   const incrementPassengers = () => {
     setPassengers(Math.min(passengers + 1, 6));
   };
@@ -103,49 +100,83 @@ export default function CabOneWay() {
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Route Section */}
+        {/* Location Section */}
         <View style={styles.sectionCompact}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconContainer}>
               <Ionicons name="location" size={18} color="#007AFF" />
             </View>
-            <Text style={styles.sectionTitle}>Cab Route</Text>
+            <Text style={styles.sectionTitle}>Pickup Location</Text>
           </View>
           
-          <View style={styles.routeContainer}>
+          <View style={styles.locationContainer}>
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
                 <Ionicons name="location-outline" size={16} color="#8E8E93" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
-                  placeholder="Pickup location"
+                  placeholder="Enter pickup location"
                   placeholderTextColor="#8E8E93"
                   value={pickupLocation}
                   onChangeText={setPickupLocation}
                 />
               </View>
             </View>
-            
-            <TouchableOpacity style={styles.swapCenter} onPress={onSwapRoute}>
-              <Animated.View style={[styles.swapCenterInner, { transform: [{ rotate: swapRotate }] }]}> 
-                <Ionicons name="swap-vertical" size={18} color="#007AFF" />
-              </Animated.View>
-            </TouchableOpacity>
-            
-            <View style={styles.inputContainer}>
-              <View style={styles.inputWrapper}>
-                <Ionicons name="location" size={16} color="#8E8E93" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Drop location"
-                  placeholderTextColor="#8E8E93"
-                  value={dropLocation}
-                  onChangeText={setDropLocation}
-                />
-              </View>
-            </View>
           </View>
         </View>
+
+        {/* Rental Package Section */}
+        <View style={[styles.sectionCompact, styles.packageCard]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.sectionIconContainer, styles.iconCircleLarge]}>
+              <Ionicons name="time" size={18} color="#007AFF" />
+            </View>
+            <Text style={styles.sectionTitle}>Rental Package</Text>
+          </View>
+          
+          <TouchableOpacity
+            style={styles.dropdownTrigger}
+            onPress={() => setRentalPackageSheetVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.dropdownTriggerText}>{selectedPackage}</Text>
+            <Ionicons name="chevron-down" size={16} color="#8E8E93" />
+          </TouchableOpacity>
+        </View>
+
+        <Modal
+          transparent
+          visible={rentalPackageSheetVisible}
+          animationType="slide"
+          onRequestClose={() => setRentalPackageSheetVisible(false)}
+        >
+          <TouchableOpacity style={styles.sheetBackdrop} activeOpacity={1} onPress={() => setRentalPackageSheetVisible(false)}>
+            <View style={styles.sheetContainer}>
+              <View style={styles.sheetHandle} />
+              <Text style={styles.sheetTitle}>Select Rental Package</Text>
+              {rentalPackages.map((pkg) => (
+                <TouchableOpacity
+                  key={pkg}
+                  style={styles.sheetItem}
+                  onPress={() => {
+                    setSelectedPackage(pkg);
+                    setRentalPackageSheetVisible(false);
+                  }}
+                >
+                  <Text style={[styles.sheetItemText, selectedPackage === pkg && styles.sheetItemTextSelected]}>
+                    {pkg}
+                  </Text>
+                  {selectedPackage === pkg && (
+                    <Ionicons name="checkmark" size={18} color="#0A84FF" />
+                  )}
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity style={styles.sheetCancel} onPress={() => setRentalPackageSheetVisible(false)}>
+                <Text style={styles.sheetCancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </Modal>
 
         {/* Date Section */}
         <View style={styles.sectionCompact}>
@@ -153,16 +184,17 @@ export default function CabOneWay() {
             <View style={styles.sectionIconContainer}>
               <Ionicons name="calendar" size={18} color="#007AFF" />
             </View>
-            <Text style={styles.sectionTitle}>Pickup Date</Text>
+            <Text style={styles.sectionTitle}>Rental Date & Time</Text>
           </View>
           
-          <TouchableOpacity style={styles.dateCard} onPress={showDatePickerModal}>
+          {/* Pickup Date */}
+          <TouchableOpacity style={styles.dateCard} onPress={showPickupDatePickerModal}>
             <View style={styles.dateCardContent}>
               <View style={styles.dateIconContainer}>
                 <Ionicons name="calendar-outline" size={14} color="#007AFF" />
               </View>
               <View style={styles.dateTextContainer}>
-                <Text style={styles.dateLabel}>Pickup</Text>
+                <Text style={styles.dateLabel}>Start Date</Text>
                 <Text style={styles.dateValue}>{pickupDate.toLocaleDateString('en-US', { 
                   weekday: 'short',
                   year: 'numeric', 
@@ -176,12 +208,12 @@ export default function CabOneWay() {
             </View>
           </TouchableOpacity>
 
-          {showDatePicker && (
+          {showPickupDatePicker && (
             <DateTimePicker
               value={pickupDate}
               mode="date"
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={onDateChange}
+              onChange={onPickupDateChange}
               minimumDate={new Date()}
             />
           )}
@@ -283,14 +315,14 @@ export default function CabOneWay() {
         {/* Search Button */}
         <TouchableOpacity 
           style={styles.searchButton} 
-          onPress={() => console.log('Search cabs')}
+          onPress={() => console.log('Search rental cabs')}
           onPressIn={onPressInCta}
           onPressOut={onPressOutCta}
           activeOpacity={0.9}
         >
           <Animated.View style={[styles.searchButtonInner, {transform: [{scale: ctaScale}]}]}>
             <Ionicons name="search" size={20} color="#FFFFFF" />
-            <Text style={styles.searchButtonText}>Search Cabs</Text>
+            <Text style={styles.searchButtonText}>Search Rental Cabs</Text>
           </Animated.View>
         </TouchableOpacity>
       </ScrollView>
@@ -347,7 +379,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333333',
   },
-  routeContainer: {
+  locationContainer: {
     flexDirection: 'column',
     alignItems: 'stretch',
     paddingHorizontal: 10,
@@ -378,28 +410,8 @@ const styles = StyleSheet.create({
     color: '#1C1C1E',
     paddingVertical: 0,
   },
-  swapCenter: {
-    position: 'absolute',
-    right: 12,
-    top: '50%',
-    marginTop: -16,
-    zIndex: 2,
-    elevation: 3,
-  },
-  swapCenterInner: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 2,
-    elevation: 2,
+  packageCard: {
+    paddingBottom: 16,
   },
   dateCard: {
     paddingHorizontal: 16,
@@ -416,6 +428,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
   },
   dateIconContainer: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 8,
   },
   dateTextContainer: {

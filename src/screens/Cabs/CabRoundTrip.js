@@ -14,9 +14,11 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function CabOneWay() {
+export default function CabRoundTrip() {
   const [pickupDate, setPickupDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [returnDate, setReturnDate] = useState(new Date(Date.now() + 24 * 60 * 60 * 1000)); // Next day
+  const [showPickupDatePicker, setShowPickupDatePicker] = useState(false);
+  const [showReturnDatePicker, setShowReturnDatePicker] = useState(false);
   const [pickupLocation, setPickupLocation] = useState('');
   const [dropLocation, setDropLocation] = useState('');
   const [passengers, setPassengers] = useState(1);
@@ -36,15 +38,30 @@ export default function CabOneWay() {
     }).start();
   }, []);
 
-  const onDateChange = (event, selectedDate) => {
-    setShowDatePicker(false);
+  const onPickupDateChange = (event, selectedDate) => {
+    setShowPickupDatePicker(false);
     if (selectedDate) {
       setPickupDate(selectedDate);
+      // Auto-adjust return date if it's before pickup
+      if (returnDate < selectedDate) {
+        setReturnDate(new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000));
+      }
     }
   };
 
-  const showDatePickerModal = () => {
-    setShowDatePicker(true);
+  const onReturnDateChange = (event, selectedDate) => {
+    setShowReturnDatePicker(false);
+    if (selectedDate) {
+      setReturnDate(selectedDate);
+    }
+  };
+
+  const showPickupDatePickerModal = () => {
+    setShowPickupDatePicker(true);
+  };
+
+  const showReturnDatePickerModal = () => {
+    setShowReturnDatePicker(true);
   };
 
   const onSwapRoute = () => {
@@ -153,10 +170,11 @@ export default function CabOneWay() {
             <View style={styles.sectionIconContainer}>
               <Ionicons name="calendar" size={18} color="#007AFF" />
             </View>
-            <Text style={styles.sectionTitle}>Pickup Date</Text>
+            <Text style={styles.sectionTitle}>Trip Dates</Text>
           </View>
           
-          <TouchableOpacity style={styles.dateCard} onPress={showDatePickerModal}>
+          {/* Pickup Date */}
+          <TouchableOpacity style={styles.dateCard} onPress={showPickupDatePickerModal}>
             <View style={styles.dateCardContent}>
               <View style={styles.dateIconContainer}>
                 <Ionicons name="calendar-outline" size={14} color="#007AFF" />
@@ -176,13 +194,44 @@ export default function CabOneWay() {
             </View>
           </TouchableOpacity>
 
-          {showDatePicker && (
+          {/* Return Date */}
+          <TouchableOpacity style={[styles.dateCard, styles.returnDateCard]} onPress={showReturnDatePickerModal}>
+            <View style={styles.dateCardContent}>
+              <View style={styles.dateIconContainer}>
+                <Ionicons name="calendar-outline" size={14} color="#007AFF" />
+              </View>
+              <View style={styles.dateTextContainer}>
+                <Text style={styles.dateLabel}>Return</Text>
+                <Text style={styles.dateValue}>{returnDate.toLocaleDateString('en-US', { 
+                  weekday: 'short',
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })}</Text>
+              </View>
+              <View style={styles.dateArrowContainer}>
+                <Ionicons name="chevron-forward" size={14} color="#8E8E93" />
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          {showPickupDatePicker && (
             <DateTimePicker
               value={pickupDate}
               mode="date"
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={onDateChange}
+              onChange={onPickupDateChange}
               minimumDate={new Date()}
+            />
+          )}
+
+          {showReturnDatePicker && (
+            <DateTimePicker
+              value={returnDate}
+              mode="date"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={onReturnDateChange}
+              minimumDate={pickupDate}
             />
           )}
         </View>
@@ -283,14 +332,14 @@ export default function CabOneWay() {
         {/* Search Button */}
         <TouchableOpacity 
           style={styles.searchButton} 
-          onPress={() => console.log('Search cabs')}
+          onPress={() => console.log('Search round trip cabs')}
           onPressIn={onPressInCta}
           onPressOut={onPressOutCta}
           activeOpacity={0.9}
         >
           <Animated.View style={[styles.searchButtonInner, {transform: [{scale: ctaScale}]}]}>
             <Ionicons name="search" size={20} color="#FFFFFF" />
-            <Text style={styles.searchButtonText}>Search Cabs</Text>
+            <Text style={styles.searchButtonText}>Search Round Trip Cabs</Text>
           </Animated.View>
         </TouchableOpacity>
       </ScrollView>
@@ -403,7 +452,11 @@ const styles = StyleSheet.create({
   },
   dateCard: {
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingTop: 6,
+  },
+  returnDateCard: {
+    paddingTop: 4,
+    paddingBottom: 6,
   },
   dateCardContent: {
     flexDirection: 'row',
@@ -416,7 +469,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
   },
   dateIconContainer: {
-    marginRight: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
   },
   dateTextContainer: {
     flex: 1,
