@@ -225,7 +225,7 @@ const OneWayForm = () => {
           <TouchableOpacity style={styles.dateCard} onPress={showDatePickerModal}>
             <View style={styles.dateCardContent}>
               <View style={styles.dateIconContainer}>
-                <Ionicons name="calendar-outline" size={20} color="#007AFF" />
+                <Ionicons name="calendar-outline" size={16} color="#007AFF" />
               </View>
               <View style={styles.dateTextContainer}>
                 <Text style={styles.dateLabel}>Departure</Text>
@@ -588,18 +588,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
     borderRadius: 8,
-    padding: 10,
+    padding: 8,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
   dateIconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 8,
     borderWidth: 1,
     borderColor: '#E5E5EA',
   },
@@ -607,20 +607,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#8E8E93',
     marginBottom: 1,
     fontWeight: '500',
   },
   dateValue: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#1C1C1E',
   },
   dateArrowContainer: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
